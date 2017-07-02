@@ -118,6 +118,10 @@
       <Project>{E12FA531-CA91-62D7-62E5-9D803BF48FF8}</Project>
       <Name>iceburg.Plugins</Name>
     </ProjectReference>
+    <ProjectReference Include="iceburg.csproj">
+      <Project>{FD681D31-E271-11D9-C600-34141FBC2170}</Project>
+      <Name>iceburg</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Standard Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
