@@ -36,7 +36,7 @@ public class ThirdPersonCameraController : MonoBehaviour {
 		if (zoom < zoomMax)
 			zoom = zoomMax;
 
-		playerCam.transform.position = new Vector3 (playerCam.transform.position.x, playerCam.transform.position.y, zoom);
+		//playerCam.transform.position = new Vector3 (character.transform.position.x, character.transform.position.y, zoom);
 
 		if (Input.GetMouseButton (1)) {
 			mouseX += Input.GetAxis ("Mouse X");
