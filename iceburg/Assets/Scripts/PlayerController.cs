@@ -21,8 +21,6 @@ public class PlayerController : MonoBehaviour {
 		translation *= Time.deltaTime;
 		rotation *= Time.deltaTime;
 
-		Debug.LogFormat ("Rotation is {0} is  speed {1} times {2}", rotation, rotationSpeed, Input.GetAxis ("Horizontal"));
-
 		transform.Translate (0, 0, translation);
 		transform.Rotate (0, rotation, 0);
 
@@ -32,6 +30,7 @@ public class PlayerController : MonoBehaviour {
 			animator.SetBool ("IsWalking", false);
 		}
 			
+		//character.transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
 
 		// player facing camera direction
 

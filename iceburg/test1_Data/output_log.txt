@@ -1,0 +1,41 @@
+Mono path[0] = 'C:/ICEBURG/iceburg/iceburg/test1_Data/Managed'
+Mono path[1] = 'C:/ICEBURG/iceburg/iceburg/test1_Data/Mono'
+Mono config path = 'C:/ICEBURG/iceburg/iceburg/test1_Data/Mono/etc'
+PlayerConnection initialized from C:/ICEBURG/iceburg/iceburg/test1_Data (debug = 0)
+PlayerConnection initialized network socket : 0.0.0.0 55104
+Multi-casting "[IP] 172.20.245.88 [Port] 55104 [Flags] 2 [Guid] 3044104472 [EditorId] 1251457944 [Version] 1048832 [Id] WindowsPlayer(DESKTOP-QTIS1FI) [Debug] 0" to [225.0.0.222:54997]...
+Started listening to [0.0.0.0:55104]
+PlayerConnection already initialized - listening to [0.0.0.0:55104]
+Player data archive not found at `C:/ICEBURG/iceburg/iceburg/test1_Data/data.unity3d`, using local filesystemInitialize engine version: 5.6.2f1 (a2913c821e27)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce 940MX (ID=0x179c)
+    Vendor:   NVIDIA
+    VRAM:     2019 MB
+    Driver:   22.21.13.8205
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
+Loading C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
+- Completed reload, in  0.303 seconds
+Platform assembly: C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\ICEBURG\iceburg\iceburg\test1_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 59Hz; virtual: 3286x1080 at -1366,0
+<RI> Initializing input.
+XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 3.924469 ms
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: fa10 -> priority: 1 
+  Thread -> id: fd74 -> priority: 1 
