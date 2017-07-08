@@ -841,11 +841,6 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 25819274c1817cb468b0062c58166bc7, type: 3}
   m_PrefabInternal: {fileID: 2030486063}
---- !u!1 &1027472203 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1487025609758048, guid: 46c416d385fa3dd448cbf9be10f72234,
-    type: 2}
-  m_PrefabInternal: {fileID: 870442347}
 --- !u!1 &1077237989
 GameObject:
   m_ObjectHideFlags: 0
@@ -1384,12 +1379,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5fe6461c99ec914f82f60850dfbd55d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1027472203}
+  target: {fileID: 1792253750}
   damping: 1
+  allowAutoFacing: 0
   mouseSensitivity: 10
   moveSpeed: 2
   zoomSpeed: 2
-  zoomMin: -2
+  zoomMin: -0.7
   zoomMax: -10
 --- !u!81 &1513406723
 AudioListener:
@@ -1693,6 +1689,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 25819274c1817cb468b0062c58166bc7, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &1792253750 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1508858538235492, guid: 46c416d385fa3dd448cbf9be10f72234,
+    type: 2}
+  m_PrefabInternal: {fileID: 870442347}
 --- !u!1001 &2019370400
 Prefab:
   m_ObjectHideFlags: 0
