@@ -19,6 +19,9 @@ public class FollowCamera : MonoBehaviour {
     public float zoomMin = -1;
     public float zoomMax = -10;
 
+    public float angleMin = 20;
+    public float angleMax = 80;
+
     void Awake()
     {
     }
@@ -65,6 +68,8 @@ public class FollowCamera : MonoBehaviour {
 
         angleAboutY += lookDeltaHoriz;
         angleAboutX += lookDeltaVert;
+
+        angleAboutX = ClampAngle(angleAboutX, angleMin, angleMax);
 
         lookDeltaHoriz = 0;
         lookDeltaVert = 0;
