@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FollowCamera : MonoBehaviour {
-	public GameObject target;
+	public Transform target;
 	public float damping = 1;
     public bool allowAutoFacing;
 
@@ -19,8 +19,18 @@ public class FollowCamera : MonoBehaviour {
     public float zoomMin = -1;
     public float zoomMax = -10;
 
+    void Awake()
+    {
+    }
+
     void Start()
     {
+        #if UNITY_EDITOR
+        if (target == null)
+        {
+            Object.Destroy(this.gameObject);
+        }
+        #endif
         zoom = 0;
     }
 
@@ -49,7 +59,7 @@ public class FollowCamera : MonoBehaviour {
         // TODO: enable autofacing intelligently?
         if (allowAutoFacing)
         {
-    		float desiredAngle = target.transform.eulerAngles.y;
+    		float desiredAngle = target.eulerAngles.y;
     		angleAboutY = Mathf.MoveTowardsAngle(currentAngleAboutY, desiredAngle, moveSpeed);
         }
 
@@ -62,17 +72,17 @@ public class FollowCamera : MonoBehaviour {
         Vector3 offset = new Vector3(0, 0, -zoom);
 
 		Quaternion rotation = Quaternion.Euler(angleAboutX, angleAboutY, 0);
-		Vector3 targetPosition = target.transform.position - (rotation * offset);
+		Vector3 targetPosition = target.position - (rotation * offset);
 
         RaycastHit hitInfo;
-        bool hit = Physics.Linecast(target.transform.position, targetPosition, out hitInfo);
+        bool hit = Physics.Linecast(target.position, targetPosition, out hitInfo);
         if (hit)
         {
             targetPosition = hitInfo.point;
         }
         transform.position = targetPosition;
 
-		transform.LookAt(target.transform);
+		transform.LookAt(target);
 	}
 
     public static float ClampAngle (float angle, float min, float max)

@@ -7,25 +7,32 @@ public class PlayerController : MonoBehaviour {
 	Animator animator;
 	public float speed = 2.0f;
 	public float rotationSpeed = 150.0f;
+	public Camera cameraPrefab;
+	public Transform cameraTarget;
 
 	Transform cameraTransform;
-	new Rigidbody rigidbody;
+	Rigidbody characterRigidbody;
 
 	void Start () {
-		animator = GetComponent<Animator> ();
-		cameraTransform = Camera.main.transform;
-		rigidbody = GetComponent<Rigidbody>();
+		Camera cam = Object.Instantiate(cameraPrefab);
+
+		var camScript = cam.GetComponent<FollowCamera>();
+		camScript.target = cameraTarget;
+
+		cameraTransform = cam.transform;
+		
+		animator = GetComponent<Animator>();
+		characterRigidbody = GetComponent<Rigidbody>();
 	}
 	
 	void Update () {
-
 		float translation = Input.GetAxis ("Vertical") * speed;
 		float rotation = Input.GetAxis ("Horizontal") * rotationSpeed;
 		translation *= Time.deltaTime;
 		rotation *= Time.deltaTime;
 
-		rigidbody.MoveRotation(transform.rotation * Quaternion.Euler(0, rotation, 0));
-		rigidbody.MovePosition(transform.position + transform.rotation * new Vector3(0, 0, translation));
+		characterRigidbody.MoveRotation(transform.rotation * Quaternion.Euler(0, rotation, 0));
+		characterRigidbody.MovePosition(transform.position + transform.rotation * new Vector3(0, 0, translation));
 
 		if (translation != 0) {
 			animator.SetBool ("IsWalking", true);
@@ -38,7 +45,7 @@ public class PlayerController : MonoBehaviour {
 			Quaternion targetRotation = Quaternion.LookRotation(cameraTransform.forward, Vector3.up);
 			Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
-			rigidbody.MoveRotation(newRotation);
+			characterRigidbody.MoveRotation(newRotation);
 		}
 	}
 }

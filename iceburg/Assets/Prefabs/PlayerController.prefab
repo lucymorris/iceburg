@@ -53,9 +53,10 @@ GameObject:
   - component: {fileID: 114788653689365906}
   - component: {fileID: 54810567657836330}
   - component: {fileID: 65340269831179778}
+  - component: {fileID: 114837272743253246}
   m_Layer: 0
   m_Name: PlayerController
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -476,9 +477,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9c0e97986128c24e82f2a9f0644034f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 0.7
   rotationSpeed: 290
-  cameraTransform: {fileID: 0}
+  cameraPrefab: {fileID: 20603375882436756, guid: 02d93d569be63f64694e095ee5b62da9,
+    type: 2}
+  cameraTarget: {fileID: 4763571490060348}
+--- !u!114 &114837272743253246
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1139587423240228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57a9d14a95561734a92ba87e94371845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items: []
 --- !u!137 &137127288158098354
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
