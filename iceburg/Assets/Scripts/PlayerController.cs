@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-	static Animator animator;
+	Animator animator;
 	public float speed = 2.0f;
 	public float rotationSpeed = 150.0f;
 
+	Transform cameraTransform;
+	new Rigidbody rigidbody;
+
 	void Start () {
-
 		animator = GetComponent<Animator> ();
-
+		cameraTransform = Camera.main.transform;
+		rigidbody = GetComponent<Rigidbody>();
 	}
 	
 	void Update () {
@@ -21,19 +24,21 @@ public class PlayerController : MonoBehaviour {
 		translation *= Time.deltaTime;
 		rotation *= Time.deltaTime;
 
-		transform.Translate (0, 0, translation);
-		transform.Rotate (0, rotation, 0);
+		rigidbody.MoveRotation(transform.rotation * Quaternion.Euler(0, rotation, 0));
+		rigidbody.MovePosition(transform.position + transform.rotation * new Vector3(0, 0, translation));
 
 		if (translation != 0) {
 			animator.SetBool ("IsWalking", true);
 		} else {
 			animator.SetBool ("IsWalking", false);
 		}
-			
-		//character.transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
+		
+		if (translation != 0)
+		{
+			Quaternion targetRotation = Quaternion.LookRotation(cameraTransform.forward, Vector3.up);
+			Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
-		// player facing camera direction
-
-	
-}
+			rigidbody.MoveRotation(newRotation);
+		}
+	}
 }
