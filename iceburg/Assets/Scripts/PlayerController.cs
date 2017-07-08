@@ -34,8 +34,6 @@ public class PlayerController : MonoBehaviour {
 		inputVector = inputVector.normalized;
 		inputVector = inputVector * speed * Time.deltaTime;
 
-		Vector3 moveVector = cameraTransform.rotation * inputVector;
-
 		Vector3 groundNormal = Vector3.up;
 		RaycastHit hitinfo;
 		float maxDistance = 3;
@@ -45,6 +43,11 @@ public class PlayerController : MonoBehaviour {
 		{
 			groundNormal = hitinfo.normal;
 		}
+
+		Vector3 cameraVector = Vector3.ProjectOnPlane(cameraTransform.forward, groundNormal);
+		Quaternion cameraRot = Quaternion.LookRotation(cameraVector, Vector3.up);
+		Vector3 moveVector = cameraRot * inputVector;
+
 		moveVector = Vector3.ProjectOnPlane(moveVector, groundNormal);
 
 		characterRigidbody.MovePosition(transform.position + moveVector);
