@@ -26,18 +26,16 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void Update () {
-		float forward = Input.GetAxis ("Vertical") * speed;
-		//float rotation = Input.GetAxis ("Horizontal") * rotationSpeed;
-		float right = Input.GetAxis ("Horizontal") * speed;
-		forward *= Time.deltaTime;
-		//rotation *= Time.deltaTime;
-		right *= Time.deltaTime;
+		float forward = Input.GetAxis ("Vertical");
+		float right = Input.GetAxis ("Horizontal");
 
 		Vector3 inputVector = new Vector3(right, 0, forward);
+		// Normalize the input vector before scaling it so that pressing two directions at once doesn't make you move faster!
+		inputVector = inputVector.normalized;
+		inputVector = inputVector * speed * Time.deltaTime;
 
 		Vector3 moveVector = cameraTransform.rotation * inputVector;
 
-		//characterRigidbody.MoveRotation(transform.rotation * Quaternion.Euler(0, rotation, 0));
 		characterRigidbody.MovePosition(transform.position + moveVector);
 
 		bool moving = inputVector.sqrMagnitude > float.Epsilon;
