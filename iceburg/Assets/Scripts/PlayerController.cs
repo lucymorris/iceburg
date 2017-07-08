@@ -26,23 +26,31 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void Update () {
-		float translation = Input.GetAxis ("Vertical") * speed;
-		float rotation = Input.GetAxis ("Horizontal") * rotationSpeed;
-		translation *= Time.deltaTime;
-		rotation *= Time.deltaTime;
+		float forward = Input.GetAxis ("Vertical") * speed;
+		//float rotation = Input.GetAxis ("Horizontal") * rotationSpeed;
+		float right = Input.GetAxis ("Horizontal") * speed;
+		forward *= Time.deltaTime;
+		//rotation *= Time.deltaTime;
+		right *= Time.deltaTime;
 
-		characterRigidbody.MoveRotation(transform.rotation * Quaternion.Euler(0, rotation, 0));
-		characterRigidbody.MovePosition(transform.position + transform.rotation * new Vector3(0, 0, translation));
+		Vector3 inputVector = new Vector3(right, 0, forward);
 
-		if (translation != 0) {
+		Vector3 moveVector = cameraTransform.rotation * inputVector;
+
+		//characterRigidbody.MoveRotation(transform.rotation * Quaternion.Euler(0, rotation, 0));
+		characterRigidbody.MovePosition(transform.position + moveVector);
+
+		bool moving = inputVector.sqrMagnitude > float.Epsilon;
+
+		if (moving) {
 			animator.SetBool ("IsWalking", true);
 		} else {
 			animator.SetBool ("IsWalking", false);
 		}
 		
-		if (Mathf.Abs(translation) > 0.01f && Mathf.Abs(rotation) < 0.01f)
+		if (moving)
 		{
-			Quaternion targetRotation = Quaternion.LookRotation(cameraTransform.forward, Vector3.up);
+			Quaternion targetRotation = Quaternion.LookRotation(moveVector, Vector3.up);
 			Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
 			characterRigidbody.MoveRotation(newRotation);
