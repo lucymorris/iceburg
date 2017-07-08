@@ -113,6 +113,8 @@ MonoBehaviour:
   zoomSpeed: 2
   zoomMin: -0.5
   zoomMax: -5
+  angleMin: 20
+  angleMax: 80
 --- !u!124 &124127172755711312
 Behaviour:
   m_ObjectHideFlags: 1

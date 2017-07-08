@@ -36,6 +36,17 @@ public class PlayerController : MonoBehaviour {
 
 		Vector3 moveVector = cameraTransform.rotation * inputVector;
 
+		Vector3 groundNormal = Vector3.up;
+		RaycastHit hitinfo;
+		float maxDistance = 3;
+		int layerMask = Physics.DefaultRaycastLayers;
+		bool hit = Physics.Raycast(characterRigidbody.position, Vector3.down, out hitinfo, maxDistance, layerMask);
+		if (hit)
+		{
+			groundNormal = hitinfo.normal;
+		}
+		moveVector = Vector3.ProjectOnPlane(moveVector, groundNormal);
+
 		characterRigidbody.MovePosition(transform.position + moveVector);
 
 		bool moving = inputVector.sqrMagnitude > float.Epsilon;
@@ -45,6 +56,8 @@ public class PlayerController : MonoBehaviour {
 		} else {
 			animator.SetBool ("IsWalking", false);
 		}
+
+		characterRigidbody.angularVelocity = new Vector3();
 		
 		if (moving)
 		{

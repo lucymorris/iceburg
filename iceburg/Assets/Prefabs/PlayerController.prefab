@@ -52,7 +52,7 @@ GameObject:
   - component: {fileID: 95696777513912990}
   - component: {fileID: 114788653689365906}
   - component: {fileID: 54810567657836330}
-  - component: {fileID: 65340269831179778}
+  - component: {fileID: 135458294054633534}
   - component: {fileID: 114837272743253246}
   m_Layer: 0
   m_Name: PlayerController
@@ -431,24 +431,12 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 10
   m_Drag: 0
-  m_AngularDrag: 0
+  m_AngularDrag: 5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65340269831179778
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1139587423240228}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.2, z: 0.2}
-  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!95 &95696777513912990
 Animator:
   serializedVersion: 3
@@ -494,6 +482,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items: []
+--- !u!135 &135458294054633534
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1139587423240228}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!137 &137127288158098354
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

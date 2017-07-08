@@ -68,11 +68,10 @@ public class FollowCamera : MonoBehaviour {
 
         angleAboutY += lookDeltaHoriz;
         angleAboutX += lookDeltaVert;
-
-        angleAboutX = ClampAngle(angleAboutX, angleMin, angleMax);
-
         lookDeltaHoriz = 0;
         lookDeltaVert = 0;
+
+        angleAboutX = ClampAngle(angleAboutX, angleMin, angleMax);
 
         Vector3 offset = new Vector3(0, 0, -zoom);
 
