@@ -62,7 +62,15 @@ public class FollowCamera : MonoBehaviour {
         Vector3 offset = new Vector3(0, 0, -zoom);
 
 		Quaternion rotation = Quaternion.Euler(angleAboutX, angleAboutY, 0);
-		transform.position = target.transform.position - (rotation * offset);
+		Vector3 targetPosition = target.transform.position - (rotation * offset);
+
+        RaycastHit hitInfo;
+        bool hit = Physics.Linecast(target.transform.position, targetPosition, out hitInfo);
+        if (hit)
+        {
+            targetPosition = hitInfo.point;
+        }
+        transform.position = targetPosition;
 
 		transform.LookAt(target.transform);
 	}

@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour {
 			animator.SetBool ("IsWalking", false);
 		}
 		
-		if (translation != 0)
+		if (Mathf.Abs(translation) > 0.01f && Mathf.Abs(rotation) < 0.01f)
 		{
 			Quaternion targetRotation = Quaternion.LookRotation(cameraTransform.forward, Vector3.up);
 			Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
