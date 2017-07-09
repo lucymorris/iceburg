@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class FollowCamera : MonoBehaviour {
-	public Transform target;
+    [UnityEngine.Serialization.FormerlySerializedAs("target")]
+	public Transform followedObject;
 	public float damping = 1;
     public bool allowAutoFacing;
 
@@ -22,19 +24,38 @@ public class FollowCamera : MonoBehaviour {
     public float angleMin = 20;
     public float angleMax = 80;
 
+    float currentAngleAboutY;
+    float currentAngleAboutX;
+
+    float currentYOffset = 0;
+
+    Camera thisCamera;
+
     void Awake()
     {
+        thisCamera = GetComponent<Camera>();
+        if (thisCamera == null)
+        {
+            Debug.LogError("No camera attacked to FollowCamera object");
+        }
     }
 
     void Start()
     {
         #if UNITY_EDITOR
-        if (target == null)
+        if (followedObject == null)
         {
             Object.Destroy(this.gameObject);
+            return;
         }
         #endif
         zoom = 0;
+        var postProcessing = GetComponent<PostProcessLayer>();
+        if (postProcessing != null) {
+            postProcessing.volumeTrigger = followedObject;
+        }
+        currentAngleAboutY = transform.eulerAngles.y;
+        currentAngleAboutX = transform.eulerAngles.x;
     }
 
     void Update()
@@ -55,38 +76,68 @@ public class FollowCamera : MonoBehaviour {
     }
 
     void LateUpdate() {
-        float currentAngleAboutY = transform.eulerAngles.y;
-        float currentAngleAboutX = transform.eulerAngles.x;
-        float angleAboutY = currentAngleAboutY;
-        float angleAboutX = currentAngleAboutX;
         // TODO: enable autofacing intelligently?
         if (allowAutoFacing)
         {
-    		float desiredAngle = target.eulerAngles.y;
-    		angleAboutY = Mathf.MoveTowardsAngle(currentAngleAboutY, desiredAngle, moveSpeed);
+    		float desiredAngle = followedObject.eulerAngles.y;
+    		currentAngleAboutY = Mathf.MoveTowardsAngle(currentAngleAboutY, desiredAngle, moveSpeed * Time.deltaTime);
         }
 
-        angleAboutY += lookDeltaHoriz;
-        angleAboutX += lookDeltaVert;
+        currentAngleAboutY += lookDeltaHoriz;
+        currentAngleAboutX += lookDeltaVert;
         lookDeltaHoriz = 0;
         lookDeltaVert = 0;
 
-        angleAboutX = ClampAngle(angleAboutX, angleMin, angleMax);
+        currentAngleAboutX = ClampAngle(currentAngleAboutX, angleMin, angleMax);
 
         Vector3 offset = new Vector3(0, 0, -zoom);
 
-		Quaternion rotation = Quaternion.Euler(angleAboutX, angleAboutY, 0);
-		Vector3 targetPosition = target.position - (rotation * offset);
+		Quaternion rotation = Quaternion.Euler(currentAngleAboutX, currentAngleAboutY, 0);
+		Vector3 targetPosition = followedObject.position - (rotation * offset);
 
+        Vector3 direction = Vector3.Normalize(targetPosition - followedObject.position);
         RaycastHit hitInfo;
-        bool hit = Physics.Linecast(target.position, targetPosition, out hitInfo);
+        bool hit = Physics.Linecast(followedObject.position, targetPosition, out hitInfo);
         if (hit)
         {
-            targetPosition = hitInfo.point;
+            Debug.DrawLine(followedObject.position, targetPosition, Color.red);
+
+            float avoidDist = -zoomMin;
+            if (hitInfo.distance > -zoomMin)
+            {
+                avoidDist = hitInfo.distance;
+            }
+            targetPosition = followedObject.position + direction * avoidDist;
         }
+
+        Quaternion targetRotation = Quaternion.LookRotation(followedObject.position - targetPosition, Vector3.up);
+
+        Vector3 viewBottom = thisCamera.ViewportToWorldPoint(new Vector3(0.5f, 0, thisCamera.nearClipPlane)) - thisCamera.transform.position;
+        viewBottom = viewBottom + targetPosition;
+
+        Vector3 viewMiddle = targetPosition + new Vector3(0, 0, thisCamera.nearClipPlane);
+
+        float maxDistance = (viewMiddle-viewBottom).magnitude;
+        int layerMask = 1 << LayerMask.NameToLayer("Environment");
+        hit = Physics.Linecast(viewMiddle, viewBottom, out hitInfo, layerMask);
+        if (hit)
+        {
+            Debug.DrawLine(viewMiddle, viewBottom, Color.yellow);
+            currentYOffset = Mathf.MoveTowards(currentYOffset, maxDistance - hitInfo.point.y, Time.deltaTime * zoomSpeed);
+        }
+        else
+        {
+            Debug.DrawLine(viewMiddle, viewBottom, Color.green);
+            currentYOffset = Mathf.MoveTowards(currentYOffset, targetPosition.y, Time.deltaTime * zoomSpeed);
+        }
+
+        targetPosition.y = currentYOffset;
+
+        targetRotation = Quaternion.LookRotation(followedObject.position - targetPosition, Vector3.up);
+
         transform.position = targetPosition;
 
-		transform.LookAt(target);
+		transform.rotation = targetRotation;
 	}
 
     public static float ClampAngle (float angle, float min, float max)
