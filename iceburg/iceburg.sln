@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iceburg", "iceburg.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iceburg.Editor.Plugins", "iceburg.Editor.Plugins.csproj", "{8FB63462-23BB-F6C4-DF5C-42984B0629A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iceburg.Editor", "iceburg.Editor.csproj", "{2125F0AA-9A78-A33F-20CE-96C6457B8617}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{8FB63462-23BB-F6C4-DF5C-42984B0629A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FB63462-23BB-F6C4-DF5C-42984B0629A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FB63462-23BB-F6C4-DF5C-42984B0629A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2125F0AA-9A78-A33F-20CE-96C6457B8617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2125F0AA-9A78-A33F-20CE-96C6457B8617}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2125F0AA-9A78-A33F-20CE-96C6457B8617}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2125F0AA-9A78-A33F-20CE-96C6457B8617}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

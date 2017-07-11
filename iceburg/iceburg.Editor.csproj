@@ -5,16 +5,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8FB63462-23BB-F6C4-DF5C-42984B0629A1}</ProjectGuid>
+    <ProjectGuid>{2125F0AA-9A78-A33F-20CE-96C6457B8617}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>Assembly-CSharp-Editor-firstpass</AssemblyName>
+    <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
     <CompilerResponseFile></CompilerResponseFile>
-    <UnityProjectType>EditorPlugins:7</UnityProjectType>
+    <UnityProjectType>Editor:5</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>5.6.2f1</UnityVersion>
     <RootNamespace></RootNamespace>
@@ -122,9 +122,39 @@
       <Project>{FD681D31-E271-11D9-C600-34141FBC2170}</Project>
       <Name>iceburg</Name>
     </ProjectReference>
+    <ProjectReference Include="iceburg.Editor.Plugins.csproj">
+      <Project>{8FB63462-23BB-F6C4-DF5C-42984B0629A1}</Project>
+      <Name>iceburg.Editor.Plugins</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Standard Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Attributes\DecoratorAttribute.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Attributes\PostProcessEditorAttribute.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\BaseEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Decorators\AttributeDecorator.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Decorators\Decorators.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Decorators\TrackballDecorator.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\EffectListEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Effects\AutoExposureEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Effects\BloomEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Effects\ColorGradingEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Effects\DefaultPostProcessEffectEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Effects\VignetteEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\PostProcessEffectBaseEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\PostProcessEffectEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\PostProcessLayerEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\PostProcessProfileEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\PostProcessVolumeEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Tools\CubeLutAssetFactory.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Tools\CubeLutAssetImporter.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Tools\ProfileFactory.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Tools\ResourceAssetFactory.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Tools\VolumeFactory.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Utils\CurveEditor.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Utils\EditorUtilities.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Utils\GlobalSettings.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Utils\SerializedParameterOverride.cs" />
+    <Compile Include="Assets\External\PostProcessing\Editor\Utils\Styling.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\External\PostProcessing\Shaders\ACES.hlsl" />
