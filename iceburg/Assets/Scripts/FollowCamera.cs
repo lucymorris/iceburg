@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+//using UnityEngine.Rendering.PostProcessing;
 
 public class FollowCamera : MonoBehaviour {
     [UnityEngine.Serialization.FormerlySerializedAs("target")]
@@ -50,10 +50,10 @@ public class FollowCamera : MonoBehaviour {
         }
         #endif
         zoom = 0;
-        var postProcessing = GetComponent<PostProcessLayer>();
-        if (postProcessing != null) {
-            postProcessing.volumeTrigger = followedObject;
-        }
+        // var postProcessing = GetComponent<PostProcessLayer>();
+        // if (postProcessing != null) {
+        //     postProcessing.volumeTrigger = followedObject;
+        // }
         currentAngleAboutY = transform.eulerAngles.y;
         currentAngleAboutX = transform.eulerAngles.x;
     }

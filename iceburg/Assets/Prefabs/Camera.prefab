@@ -24,7 +24,6 @@ GameObject:
   - component: {fileID: 92795932692130306}
   - component: {fileID: 81688332733957476}
   - component: {fileID: 114775250648819622}
-  - component: {fileID: 114469104387215798}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -95,50 +94,6 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1807382495118378}
   m_Enabled: 1
---- !u!114 &114469104387215798
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1807382495118378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  volumeTrigger: {fileID: 4222104971132872}
-  volumeLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  antialiasingMode: 2
-  temporalAntialiasing:
-    jitterSpread: 0.75
-    sharpen: 0.25
-    stationaryBlending: 0.95
-    motionBlending: 0.85
-  fastApproximateAntialiasing:
-    mobileOptimized: 0
-  ambientOcclusion:
-    enabled: 0
-    intensity: 0.5
-    radius: 0.25
-    quality: 2
-    ambientOnly: 0
-  fog:
-    enabled: 1
-    excludeSkybox: 1
-  debugView:
-    display: 0
-    monitor: 2
-    lightMeter: 1
-  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
-  m_ShowDebugLayer: 0
-  m_ShowToolkit: 0
-  m_ShowCustomSorter: 0
-  breakBeforeColorGrading: 0
-  m_BeforeTransparentBundles: []
-  m_BeforeStackBundles: []
-  m_AfterStackBundles: []
 --- !u!114 &114775250648819622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -150,7 +105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5fe6461c99ec914f82f60850dfbd55d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  followedObject: {fileID: 0}
   damping: 1
   allowAutoFacing: 0
   mouseSensitivity: 10
