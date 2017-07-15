@@ -153,7 +153,10 @@ public class FollowCamera : MonoBehaviour {
         viewMiddle.y = currentYOffset;
         Vector3 later = viewMiddle - this.transform.forward * thisCamera.nearClipPlane;
 
-        targetPosition.y = later.y;
+        Vector3 offsetTargetPosition = new Vector3(targetPosition.x, later.y, targetPosition.z);
+        Debug.DrawLine(targetPosition, offsetTargetPosition, Color.cyan);
+        
+        targetPosition = offsetTargetPosition;
 
         //targetRotation = Quaternion.LookRotation(followedObject.position - targetPosition, Vector3.up);
 
