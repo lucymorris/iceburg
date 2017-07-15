@@ -29,6 +29,8 @@ public class FollowCamera : MonoBehaviour {
 
     float currentYOffset = 0;
 
+    bool justSpawned;
+
     Camera thisCamera;
 
     void Awake()
@@ -56,6 +58,8 @@ public class FollowCamera : MonoBehaviour {
         // }
         currentAngleAboutY = transform.eulerAngles.y;
         currentAngleAboutX = transform.eulerAngles.x;
+
+        justSpawned = true;
     }
 
     void Update()
@@ -112,33 +116,53 @@ public class FollowCamera : MonoBehaviour {
 
         Quaternion targetRotation = Quaternion.LookRotation(followedObject.position - targetPosition, Vector3.up);
 
-        Vector3 viewBottom = thisCamera.ViewportToWorldPoint(new Vector3(0.5f, 0, thisCamera.nearClipPlane)) - thisCamera.transform.position;
-        viewBottom = viewBottom + targetPosition;
+        transform.rotation = targetRotation;
 
-        Vector3 viewMiddle = targetPosition + new Vector3(0, 0, thisCamera.nearClipPlane);
+        // figure out the coordinates of the middle and bottom points of the camera view, in world units
+        Vector3 viewMiddle = thisCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, thisCamera.nearClipPlane));
+        Vector3 viewBottom = thisCamera.ViewportToWorldPoint(new Vector3(0.5f, 0, thisCamera.nearClipPlane));
 
-        float maxDistance = (viewMiddle-viewBottom).magnitude;
+        // move the middle/bottom positions to where they will be for the new target position
+        viewMiddle -= transform.position;
+        viewBottom -= transform.position;
+        viewMiddle += targetPosition;
+        viewBottom += targetPosition;
+
+        Vector3 viewPitchVector = viewBottom - viewMiddle;
+        // determine the distance from the middle of the camera view to the bottom: this is how far the camera must remain from the ground
+        float cameraNearPlaneHalfHeight = viewPitchVector.magnitude;
+        // normalise the vector to use as a direction for the raycast
+        viewPitchVector = viewPitchVector / cameraNearPlaneHalfHeight;
+
+        float lerpSpeed = justSpawned ? 10000 : Time.deltaTime * zoomSpeed;
+
         int layerMask = 1 << LayerMask.NameToLayer("Environment");
-        hit = Physics.Linecast(viewMiddle, viewBottom, out hitInfo, layerMask);
-        if (hit)
+        hit = Physics.Raycast(viewMiddle, viewPitchVector, out hitInfo, layerMask);
+        if (hit && hitInfo.distance < cameraNearPlaneHalfHeight)
         {
             Debug.DrawLine(viewMiddle, viewBottom, Color.yellow);
-            currentYOffset = Mathf.MoveTowards(currentYOffset, maxDistance - hitInfo.point.y, Time.deltaTime * zoomSpeed);
+            float targetYOffset = hitInfo.point.y + cameraNearPlaneHalfHeight;
+            currentYOffset = Mathf.MoveTowards(currentYOffset, targetYOffset, lerpSpeed);
         }
         else
         {
             Debug.DrawLine(viewMiddle, viewBottom, Color.green);
-            currentYOffset = Mathf.MoveTowards(currentYOffset, targetPosition.y, Time.deltaTime * zoomSpeed);
+            currentYOffset = Mathf.MoveTowards(currentYOffset, targetPosition.y, lerpSpeed);
         }
 
-        targetPosition.y = currentYOffset;
+        viewMiddle.y = currentYOffset;
+        Vector3 later = viewMiddle - this.transform.forward * thisCamera.nearClipPlane;
 
-        targetRotation = Quaternion.LookRotation(followedObject.position - targetPosition, Vector3.up);
+        targetPosition.y = later.y;
+
+        //targetRotation = Quaternion.LookRotation(followedObject.position - targetPosition, Vector3.up);
 
         transform.position = targetPosition;
 
-		transform.rotation = targetRotation;
+        justSpawned = false;
 	}
+
+
 
     public static float ClampAngle (float angle, float min, float max)
     {
