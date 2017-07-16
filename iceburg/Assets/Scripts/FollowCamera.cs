@@ -87,6 +87,7 @@ public class FollowCamera : MonoBehaviour {
     		currentAngleAboutY = Mathf.MoveTowardsAngle(currentAngleAboutY, desiredAngle, moveSpeed * Time.deltaTime);
         }
 
+        // add rotation input
         currentAngleAboutY += lookDeltaHoriz;
         currentAngleAboutX += lookDeltaVert;
         lookDeltaHoriz = 0;
@@ -95,11 +96,13 @@ public class FollowCamera : MonoBehaviour {
         currentAngleAboutX = ClampAngle(currentAngleAboutX, angleMin, angleMax);
 
         Vector3 offset = new Vector3(0, 0, -zoom);
-
 		Quaternion rotation = Quaternion.Euler(currentAngleAboutX, currentAngleAboutY, 0);
 		Vector3 targetPosition = followedObject.position - (rotation * offset);
 
-        Vector3 direction = Vector3.Normalize(targetPosition - followedObject.position);
+
+        //////////////////
+        /// check for objects blocking the line of sight to the character
+        Vector3 directionFromCamToFollowedObj = Vector3.Normalize(targetPosition - followedObject.position);
         RaycastHit hitInfo;
         bool hit = Physics.Linecast(followedObject.position, targetPosition, out hitInfo);
         if (hit)
@@ -111,43 +114,49 @@ public class FollowCamera : MonoBehaviour {
             {
                 avoidDist = hitInfo.distance;
             }
-            targetPosition = followedObject.position + direction * avoidDist;
+            targetPosition = followedObject.position + directionFromCamToFollowedObj * avoidDist;
         }
 
+
+        // apply the look rotation here, before moving the camera out of the ground, to reduce jitter whenever the height changes
         Quaternion targetRotation = Quaternion.LookRotation(followedObject.position - targetPosition, Vector3.up);
 
         transform.rotation = targetRotation;
 
-        // figure out the coordinates of the middle and bottom points of the camera view, in world units
-        Vector3 viewMiddle = thisCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, thisCamera.nearClipPlane));
-        Vector3 viewBottom = thisCamera.ViewportToWorldPoint(new Vector3(0.5f, 0, thisCamera.nearClipPlane));
 
-        // move the middle/bottom positions to where they will be for the new target position
-        viewMiddle -= transform.position;
-        viewBottom -= transform.position;
-        viewMiddle += targetPosition;
-        viewBottom += targetPosition;
+        ////////////////
+        /// avoid clipping into the ground
 
-        Vector3 viewPitchVector = viewBottom - viewMiddle;
-        // determine the distance from the middle of the camera view to the bottom: this is how far the camera must remain from the ground
-        float cameraNearPlaneHalfHeight = viewPitchVector.magnitude;
-        // normalise the vector to use as a direction for the raycast
-        viewPitchVector = viewPitchVector / cameraNearPlaneHalfHeight;
+        float lerpSpeed = justSpawned ? 100000 : Time.deltaTime * zoomSpeed;
 
-        float lerpSpeed = justSpawned ? 10000 : Time.deltaTime * zoomSpeed;
+        // figure out the coordinates of the middle point of the camera view
+        Vector3 viewMiddle = targetPosition + transform.forward * thisCamera.nearClipPlane;
+        // get an orientation vector
+        Vector3 viewPitchVector = targetRotation * Vector3.down;
+        // determine the size of the near clip plane
+        Vector2 cameraNearPlaneExtents = CameraPlaneExtentsInWorldSpace(thisCamera, thisCamera.nearClipPlane);
+
+        // determine a starting point for the collision check (a bit higher than the current target mid point in case it's far below the terrain)
+        float originRelativeOffset = 4;
+        Vector3 castOrigin = viewMiddle - viewPitchVector * cameraNearPlaneExtents.y * originRelativeOffset;
+
+        Vector3 boxExtents = new Vector3(cameraNearPlaneExtents.x, cameraNearPlaneExtents.y, 0.05f);
+
+        // just used for debugging
+        Vector3 viewBottom = viewMiddle + viewPitchVector * cameraNearPlaneExtents.y;
 
         int layerMask = 1 << LayerMask.NameToLayer("Environment");
-        hit = Physics.Raycast(viewMiddle, viewPitchVector, out hitInfo, layerMask);
-        if (hit && hitInfo.distance < cameraNearPlaneHalfHeight)
+        hit = Physics.BoxCast(castOrigin, boxExtents, viewPitchVector, out hitInfo, targetRotation, layerMask);
+        if (hit && hitInfo.distance < cameraNearPlaneExtents.y*originRelativeOffset)
         {
-            Debug.DrawLine(viewMiddle, viewBottom, Color.yellow);
-            float targetYOffset = hitInfo.point.y + cameraNearPlaneHalfHeight;
+            Debug.DrawLine(castOrigin, viewBottom, Color.yellow);
+            float targetYOffset = hitInfo.point.y + cameraNearPlaneExtents.y;
             targetYOffset = Mathf.Max(0, targetYOffset - targetPosition.y);
             currentYOffset = Mathf.MoveTowards(currentYOffset, targetYOffset, lerpSpeed);
         }
         else
         {
-            Debug.DrawLine(viewMiddle, viewBottom, Color.green);
+            Debug.DrawLine(castOrigin, viewBottom, Color.green);
             currentYOffset = Mathf.MoveTowards(currentYOffset, 0, lerpSpeed);
         }
 
@@ -159,16 +168,13 @@ public class FollowCamera : MonoBehaviour {
         
         targetPosition = offsetTargetPosition;
 
-        //targetRotation = Quaternion.LookRotation(followedObject.position - targetPosition, Vector3.up);
 
         transform.position = targetPosition;
 
         justSpawned = false;
 	}
 
-
-
-    public static float ClampAngle (float angle, float min, float max)
+    public static float ClampAngle(float angle, float min, float max)
     {
         angle = angle % 360;
         if ((angle >= -360F) && (angle <= 360F)) {
@@ -180,5 +186,25 @@ public class FollowCamera : MonoBehaviour {
             }           
         }
         return Mathf.Clamp (angle, min, max);
+    }
+
+    struct Quad
+    {
+        public Vector3 tl;
+        public Vector3 tr;
+        public Vector3 br;
+        public Vector3 bl;
+    }
+
+    public static Vector2 CameraPlaneExtentsInWorldSpace(Camera cam, float distance)
+    {
+        float halfFov = cam.fieldOfView * 0.5f * Mathf.Deg2Rad;
+        float aspect = cam.aspect;
+        float halfHeight = Mathf.Tan(halfFov) * distance;
+        float halfWidth = halfHeight * aspect;
+
+        Vector2 result = new Vector2(halfWidth, halfHeight);
+
+        return result;
     }
 }
