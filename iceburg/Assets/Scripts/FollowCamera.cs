@@ -142,15 +142,16 @@ public class FollowCamera : MonoBehaviour {
         {
             Debug.DrawLine(viewMiddle, viewBottom, Color.yellow);
             float targetYOffset = hitInfo.point.y + cameraNearPlaneHalfHeight;
+            targetYOffset = Mathf.Max(0, targetYOffset - targetPosition.y);
             currentYOffset = Mathf.MoveTowards(currentYOffset, targetYOffset, lerpSpeed);
         }
         else
         {
             Debug.DrawLine(viewMiddle, viewBottom, Color.green);
-            currentYOffset = Mathf.MoveTowards(currentYOffset, targetPosition.y, lerpSpeed);
+            currentYOffset = Mathf.MoveTowards(currentYOffset, 0, lerpSpeed);
         }
 
-        viewMiddle.y = currentYOffset;
+        viewMiddle.y = targetPosition.y + currentYOffset;
         Vector3 later = viewMiddle - this.transform.forward * thisCamera.nearClipPlane;
 
         Vector3 offsetTargetPosition = new Vector3(targetPosition.x, later.y, targetPosition.z);
