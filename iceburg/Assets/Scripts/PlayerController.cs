@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
   float tumble = 0;
   float stamina = 0;
 
+  Vector3 inputVector;
+  bool moving;
+
   void Start()
   {
     Camera cam = Object.Instantiate(cameraPrefab);
@@ -41,75 +44,126 @@ public class PlayerController : MonoBehaviour
       tumble -= Time.deltaTime;
     }
 
-    if (!IsTumbling()) {
-	    float forward = Input.GetAxis("Vertical");
-	    float right = Input.GetAxis("Horizontal");
+    float forward = Input.GetAxis("Vertical");
+    float right = Input.GetAxis("Horizontal");
 
-	    Vector3 inputVector = new Vector3(right, 0, forward);
-	    // Normalize the input vector before scaling it so that pressing two directions at once doesn't make you move faster!
-	    inputVector = inputVector.normalized;
-	    inputVector = inputVector * speed * Time.deltaTime;
+    inputVector = new Vector3(right, 0, forward);
+    // Normalize the input vector before scaling it so that pressing two directions at once doesn't make you move faster!
+    inputVector = inputVector.normalized;
 
-	    bool moving = inputVector.sqrMagnitude > float.Epsilon;
+    moving = inputVector.sqrMagnitude > float.Epsilon;
 
-	    if (moving) {
-	      animator.SetBool("IsWalking", true);
-	    } else {
-	      animator.SetBool("IsWalking", false);
-	    }
+    if (moving) {
+      animator.SetBool("IsWalking", true);
+    } else {
+      animator.SetBool("IsWalking", false);
+    }
+  }
 
-	    Vector3 groundNormal = Vector3.up;
+  void FixedUpdate()
+  {
+    if (!IsTumbling())
+    {
+      characterRigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
-	    Vector3 actualGroundNormal = Vector3.up;
+      Vector3 groundNormal = Vector3.up;
 
-	    RaycastHit hitinfo;
-	    float maxDistance = 3;
-	    int layerMask = 1 << LayerMask.NameToLayer("Environment");
-	    bool hit = Physics.Raycast(characterRigidbody.position, Vector3.down, out hitinfo, maxDistance, layerMask);
-	    if (hit) {
-	      actualGroundNormal = hitinfo.normal;
-	    }
+      Vector3 actualGroundNormal = Vector3.up;
 
-	    Vector3 cameraVector = Vector3.ProjectOnPlane(cameraTransform.forward, groundNormal);
-	    Quaternion cameraRot = Quaternion.LookRotation(cameraVector, Vector3.up);
-	    Vector3 moveVector = cameraRot * inputVector;
+      RaycastHit hitinfo;
+      float maxDistance = 3;
+      int layerMask = 1 << LayerMask.NameToLayer("Environment");
+      bool hit = Physics.Raycast(characterRigidbody.position, Vector3.down, out hitinfo, maxDistance, layerMask);
+      if (hit) {
+        actualGroundNormal = hitinfo.normal;
+      }
 
-	    moveVector = Vector3.ProjectOnPlane(moveVector, groundNormal);
+      float desiredSpeed = 0;
+      if (moving)
+      {
+        desiredSpeed = speed;
+      }
 
-	    if (moving) {
-	      characterRigidbody.MovePosition(transform.position + moveVector);
-	      prevMove = moveVector;
-	    } else {
-	      moveVector = prevMove;
-	    }
+      Vector3 scaledInput = inputVector * desiredSpeed;
 
-    	float groundAngle = Vector3.Angle(actualGroundNormal, Vector3.up);
+      Vector3 cameraVector = Vector3.ProjectOnPlane(cameraTransform.forward, groundNormal);
+      Quaternion cameraRot = Quaternion.LookRotation(cameraVector.normalized, Vector3.up);
+      Vector3 moveVector = cameraRot * scaledInput;
 
-    	bool angleOk = groundAngle < maxSlope;
+      moveVector = Vector3.ProjectOnPlane(moveVector, groundNormal);
 
-    	if (angleOk) {
-    		//animator.SetBool("UsingStamina", false);
-    		stamina = staminaSeconds;
-    	} else if (stamina > 0) {
-    		//animator.SetBool("UsingStamina", true);
-    		stamina -= Time.deltaTime;
-    		angleOk = true;
-    	} else {
-    		//animator.SetBool("UsingStamina", true);
-    	}
+    #if PHYSICS_MOVEMENT
+      if (moving)
+      {
+        Vector3 velocityChange = (moveVector - characterRigidbody.velocity);
+        characterRigidbody.AddForce(moveVector * 100);
+        prevMove = moveVector;
+      }
+      else
+      {
+        // slow down
+        Vector3 velocityChange = (moveVector - characterRigidbody.velocity) * speed;
+        characterRigidbody.AddForce(velocityChange, ForceMode.Acceleration);
+
+        moveVector = prevMove;
+      }
+
+      // limit speed
+      float maxSpeed = desiredSpeed * 10;
+      if (characterRigidbody.velocity.magnitude > maxSpeed)
+      {
+        Vector3 maxVelocity = characterRigidbody.velocity.normalized * maxSpeed;
+        Vector3 velocityChange = (maxVelocity - characterRigidbody.velocity);
+        characterRigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+      }
+    #else
+      if (moving) {
+        characterRigidbody.MovePosition(transform.position + moveVector * Time.deltaTime);
+        prevMove = moveVector;
+      } else {
+        moveVector = prevMove;
+      }
+    #endif
+
+
+      float groundAngle = Vector3.Angle(actualGroundNormal, Vector3.up);
+
+      bool angleOk = groundAngle < maxSlope;
+
+      if (angleOk)
+      {
+        //animator.SetBool("UsingStamina", false);
+        stamina = staminaSeconds;
+      }
+      else if (stamina > 0)
+      {
+        //animator.SetBool("UsingStamina", true);
+        stamina -= Time.deltaTime;
+        angleOk = true;
+      }
+      else
+      {
+        //animator.SetBool("UsingStamina", true);
+      }
     
-      if ((moving && angleOk) || angleOk) {
+      if (angleOk)
+      {
         tumble = 0;
 
         Quaternion targetRotation = Quaternion.LookRotation(moveVector, groundNormal);
-        Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        Quaternion newRotation = Quaternion.RotateTowards(characterRigidbody.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
         characterRigidbody.MoveRotation(newRotation);
-
-        characterRigidbody.angularVelocity = new Vector3();
-      } else {
-        tumble = tumbleSeconds;
       }
+      else
+      {
+        tumble = tumbleSeconds;
+        characterRigidbody.constraints = RigidbodyConstraints.None;
+      }
+    }
+    else
+    {
+      // Tumbling
     }
   }
 

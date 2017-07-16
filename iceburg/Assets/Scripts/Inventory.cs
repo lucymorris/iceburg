@@ -10,8 +10,8 @@ public enum ItemType
 [System.Serializable]
 public class InventoryItem
 {
-	public ItemType type;
-	public int stackCount;
+  public ItemType type;
+  public int stackCount;
 }
 
 public class Inventory : MonoBehaviour {
@@ -21,23 +21,23 @@ public class Inventory : MonoBehaviour {
 
     public void Add(ItemType itemType)
     {
-    	bool existing = false;
-    	for (int i = 0; i < items.Count; ++i)
-    	{
-    		if (items[i].type == itemType)
-    		{
-    			items[i].stackCount++;
-    			existing = true;
-    		}
-    	}
-    	if (!existing)
-    	{
-    		InventoryItem newEntry = new InventoryItem();
-    		newEntry.type = itemType;
-    		newEntry.stackCount = 1;
-    		items.Add(newEntry);
-    	}
+      bool existing = false;
+      for (int i = 0; i < items.Count; ++i)
+      {
+        if (items[i].type == itemType)
+        {
+          items[i].stackCount++;
+          existing = true;
+        }
+      }
+      if (!existing)
+      {
+        InventoryItem newEntry = new InventoryItem();
+        newEntry.type = itemType;
+        newEntry.stackCount = 1;
+        items.Add(newEntry);
+      }
 
-    	itemAdded();
+      itemAdded();
     }
 }
