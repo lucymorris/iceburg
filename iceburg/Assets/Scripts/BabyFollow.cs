@@ -31,14 +31,22 @@ public class BabyFollow : MonoBehaviour
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation,
                                         Quaternion.LookRotation(direction), 0.1f);
 
-            anim.SetBool("IsWalking", false);
+            //anim.SetBool("IsWalking", false);
             if(direction.magnitude > 2)
             {
                 this.transform.Translate(0, 0, 0.05f);
-                anim.SetBool("IsWalking", true);
+                //anim.SetBool("IsWalking", true);
             }
         }
 
+        if (agent.velocity.magnitude > 0.01f)
+        {
+            anim.SetBool("IsWalking", true);
         }
+        else
+        {
+            anim.SetBool("IsWalking", false);
+        }
+    }
 
 }
