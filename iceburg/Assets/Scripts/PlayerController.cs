@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
   Animator animator;
-  public float speed = 2.0f;
+  public float speed = 1.0f;
   public float rotationSpeed = 150.0f;
   public Camera cameraPrefab;
   public Transform cameraTarget;

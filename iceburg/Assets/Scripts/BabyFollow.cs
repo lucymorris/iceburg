@@ -23,7 +23,7 @@ public class BabyFollow : MonoBehaviour
 
         agent.SetDestination(target.position);
         
-        if(Vector3.Distance(target.position, this.transform.position) > 0.2)
+        if(Vector3.Distance(target.position, this.transform.position) > 2)
         {
             Vector3 direction = target.position - this.transform.position;
             direction.y = 0;
