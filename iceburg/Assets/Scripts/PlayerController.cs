@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-  Animator animator;
+  public Animator animator;
   public float speed = 1.0f;
   public float rotationSpeed = 150.0f;
   public Camera cameraPrefab;
@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 
   Transform cameraTransform;
   Rigidbody characterRigidbody;
+  private UnityEngine.AI.NavMeshAgent agent; // nav-mesh agent used for avoidance
 
   Vector3 prevMove;
   float tumble = 0;
@@ -32,8 +33,11 @@ public class PlayerController : MonoBehaviour
 
     cameraTransform = cam.transform;
 
-    animator = GetComponent<Animator>();
+    //animator = GetComponent<Animator>();
     characterRigidbody = GetComponent<Rigidbody>();
+    agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+    agent.updatePosition = false;
+    agent.updateRotation = false;
 
     prevMove = transform.forward;
   }
@@ -165,6 +169,9 @@ public class PlayerController : MonoBehaviour
     {
       // Tumbling
     }
+
+    agent.nextPosition = characterRigidbody.position;
+    agent.velocity = characterRigidbody.velocity;
   }
 
   bool IsTumbling()
