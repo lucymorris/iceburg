@@ -93,13 +93,10 @@ public class FollowCamera : MonoBehaviour {
         if (zoom < zoomMax)
             zoom = zoomMax;
 
-        if (!zoomMode)
+        if (!zoomMode || (inputConfig.useMouse && Input.GetMouseButton(1)))
         {
-            if (!inputConfig.useMouse || Input.GetMouseButton(1))
-            {
-                lookDeltaHoriz += Input.GetAxis(inputConfig.camPan) * inputConfig.camTurnSensitivity * mouseSensitivity;
-                lookDeltaVert -= Input.GetAxis(inputConfig.camPitch) * inputConfig.camTurnSensitivity * mouseSensitivity;
-            }
+            lookDeltaHoriz += Input.GetAxis(inputConfig.camPan) * inputConfig.camTurnSensitivity * mouseSensitivity;
+            lookDeltaVert -= Input.GetAxis(inputConfig.camPitch) * inputConfig.camTurnSensitivity * mouseSensitivity;
         }
     }
 
