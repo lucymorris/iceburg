@@ -59,7 +59,7 @@ public class FollowCamera : MonoBehaviour {
             return;
         }
         #endif
-        zoom = 0;
+        zoom = (zoomMax - zoomMin) * 0.3f;
         // var postProcessing = GetComponent<PostProcessLayer>();
         // if (postProcessing != null) {
         //     postProcessing.volumeTrigger = followedObject;
@@ -69,7 +69,7 @@ public class FollowCamera : MonoBehaviour {
 
         justSpawned = true;
 
-        thisCamera.rect = new Rect(0.5f * (float)playerIndex, 0.0f, 0.5f, 1.0f);
+        thisCamera.rect = new Rect( 0.0f,0.5f * (float)playerIndex, 1.0f, 0.5f);
     }
 
     void Update()
@@ -93,10 +93,13 @@ public class FollowCamera : MonoBehaviour {
         if (zoom < zoomMax)
             zoom = zoomMax;
 
-        if (!inputConfig.useMouse || Input.GetMouseButton(1))
+        if (!zoomMode)
         {
-            lookDeltaHoriz += Input.GetAxis(inputConfig.camPan) * inputConfig.camTurnSensitivity * mouseSensitivity;
-            lookDeltaVert -= Input.GetAxis(inputConfig.camPitch) * inputConfig.camTurnSensitivity * mouseSensitivity;
+            if (!inputConfig.useMouse || Input.GetMouseButton(1))
+            {
+                lookDeltaHoriz += Input.GetAxis(inputConfig.camPan) * inputConfig.camTurnSensitivity * mouseSensitivity;
+                lookDeltaVert -= Input.GetAxis(inputConfig.camPitch) * inputConfig.camTurnSensitivity * mouseSensitivity;
+            }
         }
     }
 

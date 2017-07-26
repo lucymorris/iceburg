@@ -9,14 +9,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: beacb16a4ac0c16469720081ea26da12, type: 3}
-  m_Name: Gamepad1Inputs
+  m_Name: Gamepad2Inputs
   m_EditorClassIdentifier: 
-  moveForwardBack: L_YAxis_1
-  moveRightLeft: L_XAxis_1
-  camPan: R_XAxis_1
-  camPitch: R_YAxis_1
-  camZoom: R_YAxis_1
-  toggleZoom: LS_1
+  moveForwardBack: L_YAxis_2
+  moveRightLeft: L_XAxis_2
+  camPan: R_XAxis_2
+  camPitch: R_YAxis_2
+  camZoom: R_YAxis_2
+  toggleZoom: LS_2
   useMouse: 0
   camZoomSensitivity: 0.2
   camTurnSensitivity: 1

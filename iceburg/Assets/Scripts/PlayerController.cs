@@ -60,6 +60,8 @@ public class PlayerController : MonoBehaviour
     float forward = Input.GetAxis(inputConfig.moveForwardBack);
     float right = Input.GetAxis(inputConfig.moveRightLeft);
 
+    forward *= inputConfig.useMouse ? 1 : -1;
+
     inputVector = new Vector3(right, 0, forward);
     // Normalize the input vector before scaling it so that pressing two directions at once doesn't make you move faster!
     inputVector = inputVector.normalized;
