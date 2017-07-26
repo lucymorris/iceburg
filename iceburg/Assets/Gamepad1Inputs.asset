@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beacb16a4ac0c16469720081ea26da12, type: 3}
+  m_Name: Gamepad1Inputs
+  m_EditorClassIdentifier: 
+  moveForwardBack: L_YAxis_1
+  moveRightLeft: L_XAxis_1
+  camPan: R_XAxis_1
+  camPitch: R_YAxis_1
+  camZoom: R_YAxis_1
+  toggleZoom: LS_1
+  useMouse: 0
+  camZoomSensitivity: 1
+  camTurnSensitivity: 1

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beacb16a4ac0c16469720081ea26da12, type: 3}
+  m_Name: KeyboardMouseInputs
+  m_EditorClassIdentifier: 
+  moveForwardBack: Vertical
+  moveRightLeft: Horizontal
+  camZoom: Mouse ScrollWheel
+  camPan: Mouse X
+  camPitch: Mouse Y
+  toggleZoom: 
+  useMouse: 1
+  camZoomSensitivity: 1
+  camTurnSensitivity: 1
