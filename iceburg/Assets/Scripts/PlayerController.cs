@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
   public float staminaSeconds = 5;
   public float tumbleSeconds = 2;
   public bool enableTumbling = false;
+  public int playerIndex = 0;
+
+  public InputConfig inputConfig;
 
   Transform cameraTransform;
   Rigidbody characterRigidbody;
@@ -31,6 +34,11 @@ public class PlayerController : MonoBehaviour
 
     var camScript = cam.GetComponent<FollowCamera>();
     camScript.followedObject = cameraTarget;
+    camScript.playerIndex = playerIndex;
+    camScript.inputConfig = inputConfig;
+
+    AudioListener al = cam.GetComponent<AudioListener>();
+    al.enabled = playerIndex == 0;
 
     cameraTransform = cam.transform;
 
@@ -49,8 +57,8 @@ public class PlayerController : MonoBehaviour
       tumble -= Time.deltaTime;
     }
 
-    float forward = Input.GetAxis("Vertical");
-    float right = Input.GetAxis("Horizontal");
+    float forward = Input.GetAxis(inputConfig.moveForwardBack);
+    float right = Input.GetAxis(inputConfig.moveRightLeft);
 
     inputVector = new Vector3(right, 0, forward);
     // Normalize the input vector before scaling it so that pressing two directions at once doesn't make you move faster!

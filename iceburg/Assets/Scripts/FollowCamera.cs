@@ -24,6 +24,12 @@ public class FollowCamera : MonoBehaviour {
     public float angleMin = 20;
     public float angleMax = 80;
 
+    [System.NonSerialized]
+    public int playerIndex;
+
+    [System.NonSerialized]
+    public InputConfig inputConfig;
+
     float currentAngleAboutY;
     float currentAngleAboutX;
 
@@ -32,6 +38,8 @@ public class FollowCamera : MonoBehaviour {
     bool justSpawned;
 
     Camera thisCamera;
+
+    bool zoomMode = false;
 
     void Awake()
     {
@@ -60,11 +68,24 @@ public class FollowCamera : MonoBehaviour {
         currentAngleAboutX = transform.eulerAngles.x;
 
         justSpawned = true;
+
+        thisCamera.rect = new Rect(0.5f * (float)playerIndex, 0.0f, 0.5f, 1.0f);
     }
 
     void Update()
     {
-        zoom += Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
+        if (inputConfig.useMouse)
+        {
+            zoomMode = true;
+        }
+        else if (Input.GetButtonDown(inputConfig.toggleZoom))
+        {
+            zoomMode = !zoomMode;
+        }
+        if (zoomMode)
+        {
+            zoom += Input.GetAxis(inputConfig.camZoom) * inputConfig.camZoomSensitivity * zoomSpeed;
+        }
 
         if (zoom > zoomMin)
             zoom = zoomMin;
@@ -72,10 +93,10 @@ public class FollowCamera : MonoBehaviour {
         if (zoom < zoomMax)
             zoom = zoomMax;
 
-        if (Input.GetMouseButton(1))
+        if (!inputConfig.useMouse || Input.GetMouseButton(1))
         {
-            lookDeltaHoriz += Input.GetAxis("Mouse X") * mouseSensitivity;
-            lookDeltaVert -= Input.GetAxis("Mouse Y") * mouseSensitivity;
+            lookDeltaHoriz += Input.GetAxis(inputConfig.camPan) * inputConfig.camTurnSensitivity * mouseSensitivity;
+            lookDeltaVert -= Input.GetAxis(inputConfig.camPitch) * inputConfig.camTurnSensitivity * mouseSensitivity;
         }
     }
 
