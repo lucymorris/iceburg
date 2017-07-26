@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
   public float maxSlope = 30;
   public float staminaSeconds = 5;
   public float tumbleSeconds = 2;
+  public bool enableTumbling = false;
 
   Transform cameraTransform;
   Rigidbody characterRigidbody;
@@ -176,6 +177,6 @@ public class PlayerController : MonoBehaviour
 
   bool IsTumbling()
   {
-    return tumble > 0;
+    return enableTumbling && tumble > 0;
   }
 }
