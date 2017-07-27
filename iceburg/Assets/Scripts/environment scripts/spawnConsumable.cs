@@ -32,21 +32,31 @@ public class spawnConsumable : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        var player = other.GetComponent<PlayerController>();
+        if (player)
         {
-            Inventory inventory = other.GetComponent<Inventory>();
-            if (inventory != null)
+            if (Input.GetButtonDown(player.inputConfig.interact))
             {
-                for (int index = 0; index < respawnScripts.Count; ++index)
+                var pickerUpper = other.GetComponent<PickerUpper>();
+                if (pickerUpper != null)
                 {
-                    respawn respawnInstance = respawnScripts[index];
-                    if (respawnInstance.spawned)
+                    if (pickerUpper.heldItem == null)
                     {
-                        respawnInstance.Consume();
-                        inventory.Add(itemType);
-                        respawnInstance.transform.position = pickSpawnPosition();
-                        respawnInstance.Invoke("Respawn", 5);
-                        break;
+                        for (int index = 0; index < respawnScripts.Count; ++index)
+                        {
+                            respawn respawnInstance = respawnScripts[index];
+                            if (respawnInstance.entity != null)
+                            {
+                                pickerUpper.heldItem = respawnInstance.entity;
+                                respawnInstance.entity = null;
+
+                                respawnInstance.Consume();
+                                respawnInstance.transform.position = pickSpawnPosition();
+                                respawnInstance.Invoke("Respawn", 5);
+
+                                break;
+                            }
+                        }
                     }
                 }
             }

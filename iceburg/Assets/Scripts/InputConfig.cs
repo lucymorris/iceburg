@@ -9,7 +9,8 @@ public class InputConfig : ScriptableObject
   public string camPan ="Mouse X";
   public string camPitch ="Mouse Y";
   public string camZoom ="Mouse ScrollWheel";
-  public string toggleZoom ="";
+  public string toggleZoom = "";
+  public string interact = "A_1";
   public bool useMouse = false;
   public float camZoomSensitivity = 1;
   public float camTurnSensitivity = 1;
