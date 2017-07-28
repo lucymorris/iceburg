@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class spawnConsumable : MonoBehaviour {
 
-    public respawn fruit;
+    public respawn spawnPointPrefab;
+
+    public Holdable itemPrefab;
+
+    public List<respawn> spawnPoints = new List<respawn>();
 
     public ItemType itemType;
 
-    int spawnNum = 4;
-
-    List<respawn> respawnScripts = new List<respawn>();
+    // int spawnNum = 4;
 
 	void spawn()
     {
-        for(int i = 0; i < spawnNum; i++)
+        for(int i = 0; i < spawnPoints.Count; i++)
         {
-            Vector3 fruitPos = pickSpawnPosition();
-            respawn instance = Instantiate(fruit, fruitPos, Quaternion.identity);
+            respawn instance = spawnPoints[i];
+            instance.itemPrefab = itemPrefab;
             instance.Respawn();
-            respawnScripts.Add(instance);
         }
     }
 
@@ -42,16 +43,16 @@ public class spawnConsumable : MonoBehaviour {
                 {
                     if (pickerUpper.heldItem == null)
                     {
-                        for (int index = 0; index < respawnScripts.Count; ++index)
+                        for (int index = 0; index < spawnPoints.Count; ++index)
                         {
-                            respawn respawnInstance = respawnScripts[index];
-                            if (respawnInstance.entity != null)
+                            respawn respawnInstance = spawnPoints[index];
+                            if (respawnInstance.item != null)
                             {
-                                pickerUpper.heldItem = respawnInstance.entity;
-                                respawnInstance.entity = null;
+                                pickerUpper.PickUp(respawnInstance.item);
+                                respawnInstance.item = null;
 
                                 respawnInstance.Consume();
-                                respawnInstance.transform.position = pickSpawnPosition();
+                                //respawnInstance.transform.position = pickSpawnPosition();
                                 respawnInstance.Invoke("Respawn", 5);
 
                                 break;
@@ -62,13 +63,4 @@ public class spawnConsumable : MonoBehaviour {
             }
         }
     }
-
-    Vector3 pickSpawnPosition()
-    {
-        Vector3 fruitPos = new Vector3(this.transform.position.x + Random.Range(-0.1f, 0.15f),
-                                        this.transform.position.y + Random.Range(0.0f, 0.05f),
-                                        this.transform.position.z + Random.Range(-0.1f, 0.15f));
-        return fruitPos;
-    }
-
 }

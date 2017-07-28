@@ -7,16 +7,19 @@ public class PickerUpper : MonoBehaviour {
 
     public Holdable heldItem;
 
+    public Transform pickUpTarget;
+
     public void PickUp(Holdable item)
     {
       heldItem = item;
-      item.AddHolder(this.transform);
+      item.transform.parent = null;
+      item.AddHolder(this.pickUpTarget);
     }
 
     public void Drop()
     {
       heldItem = null;
-      heldItem.RemoveHolder(this.transform);
+      heldItem.RemoveHolder(this.pickUpTarget);
     }
 
 }

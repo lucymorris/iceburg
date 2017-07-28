@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class respawn : MonoBehaviour
 {
-    public Holdable entityPrefab;
+    public Holdable itemPrefab;
 
     [System.NonSerialized]
     public bool spawned;
     [System.NonSerialized]
-    public Holdable entity;
+    public Holdable item;
 
     public void Consume()
     {
@@ -18,11 +18,17 @@ public class respawn : MonoBehaviour
 
     public void Respawn()
     {
-        if (entity == null)
+        if (item == null)
         {
             spawned = true;
 
-            entity = Object.Instantiate(entityPrefab);
+            item = Object.Instantiate(itemPrefab, this.transform);
         }
+    }
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(transform.position, 0.5f);
     }
 }

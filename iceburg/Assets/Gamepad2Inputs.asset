@@ -17,6 +17,7 @@ MonoBehaviour:
   camPitch: R_YAxis_2
   camZoom: R_YAxis_2
   toggleZoom: LS_2
+  interact: A_2
   useMouse: 0
   camZoomSensitivity: 0.2
   camTurnSensitivity: 1

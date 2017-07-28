@@ -10,6 +10,13 @@ public class Holdable : MonoBehaviour
 
 	private Vector3 currentVelocity;
 
+	Rigidbody thisRigidbody;
+
+	public void Awake()
+	{
+		thisRigidbody = GetComponent<Rigidbody>();
+	}
+
 	public void AddHolder(Transform holder)
 	{
 		if (!holders.Contains(holder))
@@ -27,13 +34,22 @@ public class Holdable : MonoBehaviour
 	{
 		if (holders.Count > 0)
 		{
+			if (thisRigidbody != null)
+			{
+			}
 			Vector3 targetPosition = holders[0].position;
 			for (int i = 1; i < holders.Count; ++i)
 			{
 				targetPosition += holders[i].position;
 			}
+			transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime*smoothTime);
+		}
+		else
+		{
+			if (thisRigidbody != null)
+			{
 
-			transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, smoothTime);
+			}
 		}
 	}
 }
