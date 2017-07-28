@@ -70,8 +70,6 @@ GameObject:
   - component: {fileID: 33230258195648560}
   - component: {fileID: 65104171386511404}
   - component: {fileID: 23862575382575154}
-  - component: {fileID: 114629514870389386}
-  - component: {fileID: 135475795835130836}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -226,7 +224,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b68c1b05ef6f74a98284957c917e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 0}
+  itemPrefab: {fileID: 114993151248594362, guid: 29feb1bd6f6dc5d419c654edd7d099c7,
+    type: 2}
+  respawnSeconds: 5
 --- !u!114 &114255347984445408
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -238,7 +238,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b68c1b05ef6f74a98284957c917e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 0}
+  itemPrefab: {fileID: 114993151248594362, guid: 29feb1bd6f6dc5d419c654edd7d099c7,
+    type: 2}
+  respawnSeconds: 5
 --- !u!114 &114338692482561678
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -250,28 +252,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b68c1b05ef6f74a98284957c917e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 0}
---- !u!114 &114629514870389386
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1637515534628586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ddcfda212082c848b75c82c73a4eb68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnPointPrefab: {fileID: 114888748679668410, guid: 957426c5b8c669f41898f8b40b5c56c3,
-    type: 2}
   itemPrefab: {fileID: 114993151248594362, guid: 29feb1bd6f6dc5d419c654edd7d099c7,
     type: 2}
-  spawnPoints:
-  - {fileID: 114005067690058274}
-  - {fileID: 114901334752761380}
-  - {fileID: 114338692482561678}
-  - {fileID: 114255347984445408}
-  itemType: 0
+  respawnSeconds: 5
 --- !u!114 &114901334752761380
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -283,16 +266,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b68c1b05ef6f74a98284957c917e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 0}
---- !u!135 &135475795835130836
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1637515534628586}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  itemPrefab: {fileID: 114993151248594362, guid: 29feb1bd6f6dc5d419c654edd7d099c7,
+    type: 2}
+  respawnSeconds: 5

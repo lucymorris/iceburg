@@ -53,10 +53,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4368710688750934}
   - component: {fileID: 114788104555037088}
+  - component: {fileID: 114890623430896384}
   - component: {fileID: 54108257801345618}
   - component: {fileID: 135686213286014500}
   - component: {fileID: 195390991423581382}
-  - component: {fileID: 114890623430896384}
   m_Layer: 0
   m_Name: PlayerControllerNew
   m_TagString: Player
@@ -537,6 +537,10 @@ MonoBehaviour:
   tumbleSeconds: 2
   enableTumbling: 0
   playerIndex: 0
+  reachDistance: 2
+  pickUpLayers:
+    serializedVersion: 2
+    m_Bits: 1
   inputConfig: {fileID: 11400000, guid: 60b101c7116a12b4da9e62d09c55f179, type: 2}
 --- !u!114 &114890623430896384
 MonoBehaviour:
@@ -551,6 +555,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heldItem: {fileID: 0}
   pickUpTarget: {fileID: 4107581134732150}
+  pickUpDistance: 2
 --- !u!135 &135686213286014500
 SphereCollider:
   m_ObjectHideFlags: 1

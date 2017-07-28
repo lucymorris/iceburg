@@ -10,10 +10,6 @@ public class spawnConsumable : MonoBehaviour {
 
     public List<respawn> spawnPoints = new List<respawn>();
 
-    public ItemType itemType;
-
-    // int spawnNum = 4;
-
 	void spawn()
     {
         for(int i = 0; i < spawnPoints.Count; i++)
@@ -49,10 +45,8 @@ public class spawnConsumable : MonoBehaviour {
                             if (respawnInstance.item != null)
                             {
                                 pickerUpper.PickUp(respawnInstance.item);
-                                respawnInstance.item = null;
 
                                 respawnInstance.Consume();
-                                //respawnInstance.transform.position = pickSpawnPosition();
                                 respawnInstance.Invoke("Respawn", 5);
 
                                 break;

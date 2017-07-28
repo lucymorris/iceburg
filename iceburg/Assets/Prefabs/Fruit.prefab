@@ -111,6 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   holders: []
   smoothTime: 10
+  holdersRequired: 1
 --- !u!135 &135317155688014528
 SphereCollider:
   m_ObjectHideFlags: 1
