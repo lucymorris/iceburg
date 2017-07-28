@@ -112,7 +112,7 @@ MonoBehaviour:
   moveSpeed: 2
   zoomSpeed: 2
   zoomMin: -5
-  zoomMax: -25
+  zoomMax: -30
   angleMin: 10
   angleMax: 89.9
 --- !u!124 &124127172755711312
