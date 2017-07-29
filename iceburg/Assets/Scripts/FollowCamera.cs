@@ -59,7 +59,7 @@ public class FollowCamera : MonoBehaviour {
             return;
         }
         #endif
-        zoom = (zoomMax - zoomMin) * 0.3f;
+        zoom = (zoomMax - zoomMin) * 0.5f;
         // var postProcessing = GetComponent<PostProcessLayer>();
         // if (postProcessing != null) {
         //     postProcessing.volumeTrigger = followedObject;

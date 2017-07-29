@@ -4,25 +4,39 @@ using UnityEngine;
 
 public class respawn : MonoBehaviour
 {
-    public Holdable entityPrefab;
+	public Holdable itemPrefab;
+	public float respawnSeconds = 5;
 
-    [System.NonSerialized]
-    public bool spawned;
-    [System.NonSerialized]
-    public Holdable entity;
+	[System.NonSerialized]
+	public Holdable item;
 
-    public void Consume()
-    {
-        spawned = false;
-    }
+	public void Start()
+	{
+		Respawn();
+	}
 
-    public void Respawn()
-    {
-        if (entity == null)
-        {
-            spawned = true;
+	public void Consume()
+	{
+		if (item != null)
+		{
+			item = null;
 
-            entity = Object.Instantiate(entityPrefab);
-        }
-    }
+			Invoke("Respawn", respawnSeconds);
+		}
+	}
+
+	public void Respawn()
+	{
+		if (item == null)
+		{
+			item = Object.Instantiate(itemPrefab, this.transform);
+			item.SetSpawner(this);
+		}
+	}
+
+	public void OnDrawGizmos()
+	{
+		Gizmos.color = Color.yellow;
+		Gizmos.DrawSphere(transform.position, 0.5f);
+	}
 }

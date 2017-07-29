@@ -13,10 +13,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveForwardBack: Vertical
   moveRightLeft: Horizontal
-  camZoom: Mouse ScrollWheel
   camPan: Mouse X
   camPitch: Mouse Y
+  camZoom: Mouse ScrollWheel
   toggleZoom: 
+  interact: Interact
   useMouse: 1
   camZoomSensitivity: 1
   camTurnSensitivity: 1

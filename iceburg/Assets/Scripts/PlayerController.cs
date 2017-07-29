@@ -4,189 +4,221 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-  public Animator animator;
-  public float speed = 1.0f;
-  public float rotationSpeed = 150.0f;
-  public Camera cameraPrefab;
-  public Transform cameraTarget;
-  public float maxSlope = 30;
-  public float staminaSeconds = 5;
-  public float tumbleSeconds = 2;
-  public bool enableTumbling = false;
-  public int playerIndex = 0;
+	public Animator animator;
+	public float speed = 1.0f;
+	public float rotationSpeed = 150.0f;
+	public Camera cameraPrefab;
+	public Transform cameraTarget;
+	public float maxSlope = 30;
+	public float staminaSeconds = 5;
+	public float tumbleSeconds = 2;
+	public bool enableTumbling = false;
+	public int playerIndex = 0;
+	public float reachDistance = 2;
+	public LayerMask pickUpLayers;
 
-  public InputConfig inputConfig;
+	public InputConfig inputConfig;
 
-  Transform cameraTransform;
-  Rigidbody characterRigidbody;
-  private UnityEngine.AI.NavMeshAgent agent; // nav-mesh agent used for avoidance
+	Transform cameraTransform;
+	Rigidbody characterRigidbody;
+	private UnityEngine.AI.NavMeshAgent agent; // nav-mesh agent used for avoidance
+	private PickerUpper pickerUpper;
 
-  Vector3 prevMove;
-  float tumble = 0;
-  float stamina = 0;
+	Vector3 prevMove;
+	float tumble = 0;
+	float stamina = 0;
 
-  Vector3 inputVector;
-  bool moving;
+	Vector3 inputVector;
+	bool moving;
 
-  void Start()
-  {
-    Camera cam = Object.Instantiate(cameraPrefab);
+	Collider[] results = new Collider[60];
 
-    var camScript = cam.GetComponent<FollowCamera>();
-    camScript.followedObject = cameraTarget;
-    camScript.playerIndex = playerIndex;
-    camScript.inputConfig = inputConfig;
+	void Awake()
+	{
+		pickerUpper = GetComponent<PickerUpper>();
+	}
 
-    AudioListener al = cam.GetComponent<AudioListener>();
-    al.enabled = playerIndex == 0;
+	void Start()
+	{
+		Camera cam = Object.Instantiate(cameraPrefab);
 
-    cameraTransform = cam.transform;
+		var camScript = cam.GetComponent<FollowCamera>();
+		camScript.followedObject = cameraTarget;
+		camScript.playerIndex = playerIndex;
+		camScript.inputConfig = inputConfig;
 
-    //animator = GetComponent<Animator>();
-    characterRigidbody = GetComponent<Rigidbody>();
-    agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-    agent.updatePosition = false;
-    agent.updateRotation = false;
+		AudioListener al = cam.GetComponent<AudioListener>();
+		al.enabled = playerIndex == 0;
 
-    prevMove = transform.forward;
-  }
+		cameraTransform = cam.transform;
 
-  void Update()
-  {
-    if (tumble > 0) {
-      tumble -= Time.deltaTime;
-    }
+		//animator = GetComponent<Animator>();
+		characterRigidbody = GetComponent<Rigidbody>();
+		agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+		agent.updatePosition = false;
+		agent.updateRotation = false;
 
-    float forward = Input.GetAxis(inputConfig.moveForwardBack);
-    float right = Input.GetAxis(inputConfig.moveRightLeft);
+		prevMove = transform.forward;
+	}
 
-    forward *= inputConfig.useMouse ? 1 : -1;
+	void Update()
+	{
+		if (tumble > 0) {
+			tumble -= Time.deltaTime;
+		}
 
-    inputVector = new Vector3(right, 0, forward);
-    // Normalize the input vector before scaling it so that pressing two directions at once doesn't make you move faster!
-    inputVector = inputVector.normalized;
+		float forward = Input.GetAxis(inputConfig.moveForwardBack);
+		float right = Input.GetAxis(inputConfig.moveRightLeft);
 
-    moving = inputVector.sqrMagnitude > float.Epsilon;
+		forward *= inputConfig.useMouse ? 1 : -1;
 
-    if (moving) {
-      animator.SetBool("IsWalking", true);
-    } else {
-      animator.SetBool("IsWalking", false);
-    }
-  }
+		inputVector = new Vector3(right, 0, forward);
+		// Normalize the input vector before scaling it so that pressing two directions at once doesn't make you move faster!
+		inputVector = inputVector.normalized;
 
-  void FixedUpdate()
-  {
-    if (!IsTumbling())
-    {
-      characterRigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+		moving = inputVector.sqrMagnitude > float.Epsilon;
 
-      Vector3 groundNormal = Vector3.up;
+		if (moving) {
+			animator.SetBool("IsWalking", true);
+		} else {
+			animator.SetBool("IsWalking", false);
+		}
 
-      Vector3 actualGroundNormal = Vector3.up;
+		if (Input.GetButtonDown(inputConfig.interact))
+		{
+			if (pickerUpper.heldItem == null)
+			{
+				Vector3 origin = this.transform.position;
+				float radius = reachDistance;
+				int layerMask = pickUpLayers.value;
+				int hits = Physics.OverlapSphereNonAlloc(origin, radius, results, layerMask);
+				for (int index = 0; index < hits; ++index)
+				{
+					Collider hit = results[index];
+					Holdable item = hit.GetComponent<Holdable>();
+					if (item != null)
+					{
+						pickerUpper.PickUp(item);
 
-      RaycastHit hitinfo;
-      float maxDistance = 3;
-      int layerMask = 1 << LayerMask.NameToLayer("Environment");
-      bool hit = Physics.Raycast(characterRigidbody.position, Vector3.down, out hitinfo, maxDistance, layerMask);
-      if (hit) {
-        actualGroundNormal = hitinfo.normal;
-      }
+						break;
+					}
+				}
+			}
+		}
+	}
 
-      float desiredSpeed = 0;
-      if (moving)
-      {
-        desiredSpeed = speed;
-      }
+	void FixedUpdate()
+	{
+		if (!IsTumbling())
+		{
+			characterRigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
-      Vector3 scaledInput = inputVector * desiredSpeed;
+			Vector3 groundNormal = Vector3.up;
 
-      Vector3 cameraVector = Vector3.ProjectOnPlane(cameraTransform.forward, groundNormal);
-      Quaternion cameraRot = Quaternion.LookRotation(cameraVector.normalized, Vector3.up);
-      Vector3 moveVector = cameraRot * scaledInput;
+			Vector3 actualGroundNormal = Vector3.up;
 
-      moveVector = Vector3.ProjectOnPlane(moveVector, groundNormal);
+			RaycastHit hitinfo;
+			float maxDistance = 3;
+			int layerMask = 1 << LayerMask.NameToLayer("Environment");
+			bool hit = Physics.Raycast(characterRigidbody.position, Vector3.down, out hitinfo, maxDistance, layerMask);
+			if (hit) {
+				actualGroundNormal = hitinfo.normal;
+			}
 
-    #if PHYSICS_MOVEMENT
-      if (moving)
-      {
-        Vector3 velocityChange = (moveVector - characterRigidbody.velocity);
-        characterRigidbody.AddForce(moveVector * 100);
-        prevMove = moveVector;
-      }
-      else
-      {
-        // slow down
-        Vector3 velocityChange = (moveVector - characterRigidbody.velocity) * speed;
-        characterRigidbody.AddForce(velocityChange, ForceMode.Acceleration);
+			float desiredSpeed = 0;
+			if (moving)
+			{
+				desiredSpeed = speed;
+			}
 
-        moveVector = prevMove;
-      }
+			Vector3 scaledInput = inputVector * desiredSpeed;
 
-      // limit speed
-      float maxSpeed = desiredSpeed * 10;
-      if (characterRigidbody.velocity.magnitude > maxSpeed)
-      {
-        Vector3 maxVelocity = characterRigidbody.velocity.normalized * maxSpeed;
-        Vector3 velocityChange = (maxVelocity - characterRigidbody.velocity);
-        characterRigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
-      }
-    #else
-      if (moving) {
-        characterRigidbody.MovePosition(transform.position + moveVector * Time.deltaTime);
-        prevMove = moveVector;
-      } else {
-        moveVector = prevMove;
-      }
-    #endif
+			Vector3 cameraVector = Vector3.ProjectOnPlane(cameraTransform.forward, groundNormal);
+			Quaternion cameraRot = Quaternion.LookRotation(cameraVector.normalized, Vector3.up);
+			Vector3 moveVector = cameraRot * scaledInput;
+
+			moveVector = Vector3.ProjectOnPlane(moveVector, groundNormal);
+
+		#if PHYSICS_MOVEMENT
+			if (moving)
+			{
+				Vector3 velocityChange = (moveVector - characterRigidbody.velocity);
+				characterRigidbody.AddForce(moveVector * 100);
+				prevMove = moveVector;
+			}
+			else
+			{
+				// slow down
+				Vector3 velocityChange = (moveVector - characterRigidbody.velocity) * speed;
+				characterRigidbody.AddForce(velocityChange, ForceMode.Acceleration);
+
+				moveVector = prevMove;
+			}
+
+			// limit speed
+			float maxSpeed = desiredSpeed * 10;
+			if (characterRigidbody.velocity.magnitude > maxSpeed)
+			{
+				Vector3 maxVelocity = characterRigidbody.velocity.normalized * maxSpeed;
+				Vector3 velocityChange = (maxVelocity - characterRigidbody.velocity);
+				characterRigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+			}
+		#else
+			if (moving) {
+				characterRigidbody.MovePosition(transform.position + moveVector * Time.deltaTime);
+				prevMove = moveVector;
+			} else {
+				moveVector = prevMove;
+			}
+		#endif
 
 
-      float groundAngle = Vector3.Angle(actualGroundNormal, Vector3.up);
+			float groundAngle = Vector3.Angle(actualGroundNormal, Vector3.up);
 
-      bool angleOk = groundAngle < maxSlope;
+			bool angleOk = groundAngle < maxSlope;
 
-      if (angleOk)
-      {
-        //animator.SetBool("UsingStamina", false);
-        stamina = staminaSeconds;
-      }
-      else if (stamina > 0)
-      {
-        //animator.SetBool("UsingStamina", true);
-        stamina -= Time.deltaTime;
-        angleOk = true;
-      }
-      else
-      {
-        //animator.SetBool("UsingStamina", true);
-      }
-    
-      if (angleOk)
-      {
-        tumble = 0;
+			if (angleOk)
+			{
+				//animator.SetBool("UsingStamina", false);
+				stamina = staminaSeconds;
+			}
+			else if (stamina > 0)
+			{
+				//animator.SetBool("UsingStamina", true);
+				stamina -= Time.deltaTime;
+				angleOk = true;
+			}
+			else
+			{
+				//animator.SetBool("UsingStamina", true);
+			}
+		
+			if (angleOk)
+			{
+				tumble = 0;
 
-        Quaternion targetRotation = Quaternion.LookRotation(moveVector, groundNormal);
-        Quaternion newRotation = Quaternion.RotateTowards(characterRigidbody.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+				Quaternion targetRotation = Quaternion.LookRotation(moveVector, groundNormal);
+				Quaternion newRotation = Quaternion.RotateTowards(characterRigidbody.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
-        characterRigidbody.MoveRotation(newRotation);
-      }
-      else
-      {
-        tumble = tumbleSeconds;
-        characterRigidbody.constraints = RigidbodyConstraints.None;
-      }
-    }
-    else
-    {
-      // Tumbling
-    }
+				characterRigidbody.MoveRotation(newRotation);
+			}
+			else
+			{
+				tumble = tumbleSeconds;
+				characterRigidbody.constraints = RigidbodyConstraints.None;
+			}
+		}
+		else
+		{
+			// Tumbling
+		}
 
-    agent.nextPosition = characterRigidbody.position;
-    agent.velocity = characterRigidbody.velocity;
-  }
+		agent.nextPosition = characterRigidbody.position;
+		agent.velocity = characterRigidbody.velocity;
+	}
 
-  bool IsTumbling()
-  {
-    return enableTumbling && tumble > 0;
-  }
+	bool IsTumbling()
+	{
+		return enableTumbling && tumble > 0;
+	}
 }
