@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
 
 	Vector3 inputVector;
 	bool moving;
+	bool droppingItem;
 
 	Collider[] results = new Collider[60];
 
@@ -85,35 +86,45 @@ public class PlayerController : MonoBehaviour
 			animator.SetBool("IsWalking", false);
 		}
 
-		if (Input.GetButton(inputConfig.interact))
+		if (!droppingItem)
 		{
-			pickerUpper.pickUpDistance = reachDistance;
-
-			if (pickerUpper.heldItem == null)
+			if (Input.GetButton(inputConfig.interact))
 			{
-				pickerUpper.Activate();
-				
-				Vector3 origin = this.transform.position;
-				float radius = pickerUpper.activeRadius;
-				int layerMask = pickUpLayers.value;
-				int hits = Physics.OverlapSphereNonAlloc(origin, radius, results, layerMask);
-				for (int index = 0; index < hits; ++index)
-				{
-					Collider hit = results[index];
-					Holdable item = hit.GetComponent<Holdable>();
-					if (item != null)
-					{
-						pickerUpper.PickUp(item);
+				pickerUpper.pickUpDistance = reachDistance;
 
-						break;
+				if (pickerUpper.heldItem == null)
+				{
+					pickerUpper.Activate();
+
+					Vector3 origin = this.transform.position;
+					float radius = pickerUpper.activeRadius;
+					int layerMask = pickUpLayers.value;
+					int hits = Physics.OverlapSphereNonAlloc(origin, radius, results, layerMask);
+					for (int index = 0; index < hits; ++index)
+					{
+						Collider hit = results[index];
+						Holdable item = hit.GetComponent<Holdable>();
+						if (item != null)
+						{
+							pickerUpper.PickUp(item);
+							break;
+						}
 					}
 				}
+			}
+		}
+		else
+		{
+			if (Input.GetButtonUp(inputConfig.interact))
+			{
+				droppingItem = false;
 			}
 		}
 		if (Input.GetButtonDown(inputConfig.interact))
 		{
 			if (pickerUpper.heldItem != null)
 			{
+				droppingItem = true;
 				pickerUpper.Drop();
 			}
 		}
