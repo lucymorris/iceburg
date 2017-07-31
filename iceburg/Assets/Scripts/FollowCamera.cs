@@ -123,9 +123,10 @@ public class FollowCamera : MonoBehaviour {
 
         //////////////////
         /// check for objects blocking the line of sight to the character
+        int blockingLayerMask = 1 << LayerMask.NameToLayer("Environment");
         Vector3 directionFromCamToFollowedObj = Vector3.Normalize(targetPosition - followedObject.position);
         RaycastHit hitInfo;
-        bool hit = Physics.Linecast(followedObject.position, targetPosition, out hitInfo);
+        bool hit = Physics.Linecast(followedObject.position, targetPosition, out hitInfo, blockingLayerMask);
         if (hit)
         {
             Debug.DrawLine(followedObject.position, targetPosition, Color.red);
@@ -166,8 +167,8 @@ public class FollowCamera : MonoBehaviour {
         // just used for debugging
         Vector3 viewBottom = viewMiddle + viewPitchVector * cameraNearPlaneExtents.y;
 
-        int layerMask = 1 << LayerMask.NameToLayer("Environment");
-        hit = Physics.BoxCast(castOrigin, boxExtents, viewPitchVector, out hitInfo, targetRotation, layerMask);
+        int groundLayerMask = 1 << LayerMask.NameToLayer("Environment");
+        hit = Physics.BoxCast(castOrigin, boxExtents, viewPitchVector, out hitInfo, targetRotation, groundLayerMask);
         if (hit && hitInfo.distance < cameraNearPlaneExtents.y*originRelativeOffset)
         {
             Debug.DrawLine(castOrigin, viewBottom, Color.yellow);

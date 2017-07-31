@@ -4,19 +4,7 @@ using UnityEngine;
 
 public class Holdable : MonoBehaviour
 {
-	[System.Serializable]
-	public struct Holder
-	{
-		public PickerUpper transform;
-		public float holdDistance;
-
-		public Holder(PickerUpper transform, float holdDistance)
-		{
-			this.transform = transform;
-			this.holdDistance = holdDistance;
-		}
-	}
-	public List<Holder> holders = new List<Holder>();
+	public List<PickerUpper> holders = new List<PickerUpper>();
 
 	public float smoothTime;
 
@@ -25,23 +13,33 @@ public class Holdable : MonoBehaviour
 	private Vector3 currentVelocity;
 	private respawn spawner;
 
+	public static int defaultLayer;
+	public static int heldLayer;
+
 	Rigidbody thisRigidbody;
 
 	public void Awake()
 	{
 		thisRigidbody = GetComponent<Rigidbody>();
+
+		defaultLayer = LayerMask.NameToLayer("Interactive");
+		heldLayer = LayerMask.NameToLayer("HeldItem");
 	}
 
 	public void SetSpawner(respawn spawner)
 	{
 		this.spawner = spawner;
+		if (thisRigidbody != null)
+		{
+			thisRigidbody.isKinematic = true;
+		}
 	}
 
 	public void AddHolder(PickerUpper holder, float holdDistance)
 	{
 		if (!this.IsBeingHeldBy(holder))
 		{
-			holders.Add(new Holder(holder, holdDistance));
+			holders.Add(holder);
 		}
 	}
 
@@ -49,7 +47,7 @@ public class Holdable : MonoBehaviour
 	{
 		for (int i = 0; i < holders.Count; ++i)
 		{
-			if (holders[i].transform == holder)
+			if (holders[i] == holder)
 			{
 				return true;
 			}
@@ -61,9 +59,9 @@ public class Holdable : MonoBehaviour
 	{
 		for (int i = holders.Count-1; i >= 0; --i)
 		{
-			if (holders[i].transform == holder)
+			if (holders[i] == holder)
 			{
-				holders[i].transform.heldItem = null;
+				holders[i].heldItem = null;
 				holders.RemoveAt(i);
 			}
 		}
@@ -73,9 +71,9 @@ public class Holdable : MonoBehaviour
 	{
 		for (int i = holders.Count-1; i >= 0; --i)
 		{
-			if (Vector3.Distance(holders[i].transform.pickUpTarget.position, transform.position) > holders[i].holdDistance)
+			if (Vector3.Distance(holders[i].pickUpTarget.position, transform.position) > holders[i].passiveRadius)
 			{
-				holders[i].transform.heldItem = null;
+				holders[i].heldItem = null;
 				holders.RemoveAt(i);
 			}
 		}
@@ -95,22 +93,35 @@ public class Holdable : MonoBehaviour
 				spawner.Consume();
 				spawner = null;
 			}
+
+			this.gameObject.layer = heldLayer;
+
+			Vector3 targetPosition = holders[0].pickUpTarget.position;
+			for (int i = 1; i < holders.Count; ++i)
+			{
+				targetPosition += holders[i].pickUpTarget.position;
+			}
+			targetPosition = targetPosition / (float)holders.Count;
 			if (thisRigidbody != null)
 			{
 				thisRigidbody.isKinematic = true;
+				thisRigidbody.MovePosition(Vector3.Lerp(transform.position, targetPosition, Time.deltaTime*smoothTime));
 			}
-			Vector3 targetPosition = holders[0].transform.pickUpTarget.position;
-			for (int i = 1; i < holders.Count; ++i)
+			else
 			{
-				targetPosition += holders[i].transform.pickUpTarget.position;
+				transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime*smoothTime);
 			}
-			transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime*smoothTime);
 		}
 		else
 		{
-			if (thisRigidbody != null)
+			this.gameObject.layer = defaultLayer;
+
+			if (spawner == null)
 			{
-				thisRigidbody.isKinematic = false;
+				if (thisRigidbody != null)
+				{
+					thisRigidbody.isKinematic = false;
+				}
 			}
 		}
 	}

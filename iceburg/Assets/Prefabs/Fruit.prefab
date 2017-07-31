@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 23154739980829038}
   - component: {fileID: 114993151248594362}
   - component: {fileID: 54002580789108848}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Fruit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   holders: []
   smoothTime: 10
-  holdersRequired: 1
+  holdersRequired: 2
 --- !u!135 &135317155688014528
 SphereCollider:
   m_ObjectHideFlags: 1

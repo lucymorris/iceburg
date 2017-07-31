@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
 	void Awake()
 	{
 		pickerUpper = GetComponent<PickerUpper>();
+		pickerUpper.pickUpDistance = reachDistance;
 	}
 
 	void Start()
@@ -84,12 +85,16 @@ public class PlayerController : MonoBehaviour
 			animator.SetBool("IsWalking", false);
 		}
 
-		if (Input.GetButtonDown(inputConfig.interact))
+		if (Input.GetButton(inputConfig.interact))
 		{
+			pickerUpper.pickUpDistance = reachDistance;
+
 			if (pickerUpper.heldItem == null)
 			{
+				pickerUpper.Activate();
+				
 				Vector3 origin = this.transform.position;
-				float radius = reachDistance;
+				float radius = pickerUpper.activeRadius;
 				int layerMask = pickUpLayers.value;
 				int hits = Physics.OverlapSphereNonAlloc(origin, radius, results, layerMask);
 				for (int index = 0; index < hits; ++index)
@@ -103,6 +108,13 @@ public class PlayerController : MonoBehaviour
 						break;
 					}
 				}
+			}
+		}
+		if (Input.GetButtonDown(inputConfig.interact))
+		{
+			if (pickerUpper.heldItem != null)
+			{
+				pickerUpper.Drop();
 			}
 		}
 	}

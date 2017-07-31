@@ -16,13 +16,13 @@ TagManager:
   - 
   - Environment
   - 
+  - Player
   - 
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - Interactive
+  - HeldItem
   - 
   - 
   - 
