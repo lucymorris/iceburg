@@ -39,11 +39,6 @@ public class Holdable : MonoBehaviour
 
 	public void AddHolder(PickerUpper holder, float holdDistance)
 	{
-		if (spawner != null)
-		{
-			spawner.Consume();
-			spawner = null;
-		}
 		if (!this.IsBeingHeldBy(holder))
 		{
 			holders.Add(new Holder(holder, holdDistance));
@@ -85,15 +80,21 @@ public class Holdable : MonoBehaviour
 			}
 		}
 
-		if (spawner != null)
+		// if (spawner != null)
+		// {
+		// 	if (thisRigidbody != null)
+		// 	{
+		// 		thisRigidbody.isKinematic = true;
+		// 	}
+		// }
+		// else
+		if (holders.Count >= holdersRequired)
 		{
-			if (thisRigidbody != null)
+			if (spawner != null)
 			{
-				thisRigidbody.isKinematic = true;
+				spawner.Consume();
+				spawner = null;
 			}
-		}
-		else if (holders.Count >= holdersRequired)
-		{
 			if (thisRigidbody != null)
 			{
 				thisRigidbody.isKinematic = true;
