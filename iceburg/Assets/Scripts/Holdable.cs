@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class Holdable : MonoBehaviour
 {
+	public enum ItemType { Fruit, Ice }
+
 	public List<PickerUpper> holders = new List<PickerUpper>();
+
+	public ItemType type;
 
 	public float smoothTime;
 
@@ -12,6 +16,7 @@ public class Holdable : MonoBehaviour
 
 	private Vector3 currentVelocity;
 	private respawn spawner;
+	private Objective objective;
 
 	public static int defaultLayer;
 	public static int heldLayer;
@@ -28,10 +33,31 @@ public class Holdable : MonoBehaviour
 
 	public void SetSpawner(respawn spawner)
 	{
-		this.spawner = spawner;
-		if (thisRigidbody != null)
+		if (spawner != null)
 		{
-			thisRigidbody.isKinematic = true;
+			this.spawner = spawner;
+			if (thisRigidbody != null)
+			{
+				thisRigidbody.isKinematic = true;
+			}
+		}
+		else
+		{
+			Debug.LogError("Tried to set spawner to null!");
+		}
+	}
+
+	public void SetObjective(Objective objective)
+	{
+		ClearHolders();
+		this.objective = objective;
+	}
+
+	public void ClearObjective(Objective objective)
+	{
+		if (this.objective == objective)
+		{
+			this.objective = objective;
 		}
 	}
 
@@ -65,6 +91,15 @@ public class Holdable : MonoBehaviour
 				holders.RemoveAt(i);
 			}
 		}
+	}
+
+	public void ClearHolders()
+	{
+		for (int i = holders.Count-1; i >= 0; --i)
+		{
+			holders[i].heldItem = null;
+		}
+		holders.Clear();
 	}
 
 	public void Update()
@@ -116,7 +151,14 @@ public class Holdable : MonoBehaviour
 		{
 			this.gameObject.layer = defaultLayer;
 
-			if (spawner == null)
+			if (objective != null || spawner != null)
+			{
+				if (thisRigidbody != null)
+				{
+					thisRigidbody.isKinematic = true;
+				}
+			}
+			else
 			{
 				if (thisRigidbody != null)
 				{
