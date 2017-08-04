@@ -87,6 +87,7 @@
     <Compile Include="Assets\Scripts\BabyFollow.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\CharacterController.cs" />
+    <Compile Include="Assets\Scripts\DepositObjective.cs" />
     <Compile Include="Assets\Scripts\environment scripts\respawn.cs" />
     <Compile Include="Assets\Scripts\environment scripts\spawnConsumable.cs" />
     <Compile Include="Assets\Scripts\FollowCamera.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Assets\Scripts\Inventory.cs" />
     <Compile Include="Assets\Scripts\InventoryScreen.cs" />
     <Compile Include="Assets\Scripts\InventoryScreenEntry.cs" />
+    <Compile Include="Assets\Scripts\NPC.cs" />
     <Compile Include="Assets\Scripts\PickerUpper.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\ThirdPersonCameraController.cs" />
