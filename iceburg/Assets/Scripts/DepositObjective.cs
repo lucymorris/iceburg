@@ -55,6 +55,8 @@ public class DepositObjective : Objective
 		}
 		heldItems.Clear();
 		triggerCollider.enabled = false;
+
+		complete.Invoke();
 	}
 
 	public void CheckCompletion()
