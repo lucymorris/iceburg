@@ -277,6 +277,7 @@ GameObject:
   - component: {fileID: 4215663808477980}
   - component: {fileID: 54636037897393634}
   - component: {fileID: 114569196838693674}
+  - component: {fileID: 114116703316182902}
   m_Layer: 10
   m_Name: npc_teacher
   m_TagString: Untagged
@@ -422,7 +423,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1804626008471856}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 2.8, z: -11.11}
+  m_LocalPosition: {x: 3.61, y: 2.43, z: -11.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4822782651877616}
@@ -736,6 +737,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &114116703316182902
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1804626008471856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25fb867d2049d41f597aefdd6b19f598, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameText: Nelli
+  nameColor: {r: 1, g: 1, b: 1, a: 1}
+  soundEffect: {fileID: 0}
+  portraits: []
+  portraitsFace: 0
+  setSayDialog: {fileID: 0}
+  description: 
 --- !u!114 &114569196838693674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -747,8 +766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1210beb39721fcb488e0e9a77228cf18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectives:
-  - {fileID: 0}
+  objectives: []
 --- !u!135 &135088895786653938
 SphereCollider:
   m_ObjectHideFlags: 1

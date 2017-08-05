@@ -2,72 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Objective : MonoBehaviour
-{
-	// TODO: get rid of this string and pass in a string form the dialog system as the FormatDialog format
-	public string dialogText;
-	public string completeDialogText;
-
-	public abstract void SetOwner(NPC owner);
-	public abstract string FormatDialog(string format);
-	public abstract void Activate();
-	public abstract bool IsComplete();
-	public abstract void PostCompletion();
-}
-
 public class NPC : MonoBehaviour
 {
-	public List<Objective> objectives = new List<Objective>();
-
 	Rigidbody thisRigidbody;
 
-	int currentObjectiveIndex = 0;
+	Objective currentObjective;
 
 	public void Awake()
 	{
 		thisRigidbody = GetComponent<Rigidbody>();
 	}
 
-	public void Start()
-	{
-		for (int i = 0; i < objectives.Count; ++i)
-		{
-			objectives[i].SetOwner(this);
-		}
-		currentObjectiveIndex = -1;
-		ActivateNextObjective();
-	}
-
 	public void CompleteObjective(Objective what)
 	{
-		if (objectives.IndexOf(what) == currentObjectiveIndex)
+		if (what == currentObjective)
 		{
 			what.PostCompletion();
 
-			string objectiveText = what.FormatDialog(what.completeDialogText); 
-			Debug.LogFormat("NPC ({0}): {1}", name, objectiveText);
+			Debug.LogFormat("NPC ({0}): completed {1}", name, what);
 
 			StartCoroutine(YayCoroutine());
 
-			ActivateNextObjective();
-		}
-	}
-
-	public void ActivateNextObjective()
-	{
-		currentObjectiveIndex++;
-		if (currentObjectiveIndex < objectives.Count)
-		{
-			Objective next = objectives[currentObjectiveIndex];
-			next.Activate();
-
-			string objectiveText = next.FormatDialog(next.dialogText); 
-			Debug.LogFormat("NPC ({0}): {1}", name, objectiveText);
+			currentObjective = null;
 		}
 		else
 		{
-			Debug.LogFormat("NPC ({0}): All objective complete", name);
+			Debug.LogWarningFormat("NPC ({0}): can't complete objective {1} because it isn't the current objective {2}", name, what, currentObjective);
 		}
+	}
+
+	public Objective StartObjective(Objective what)
+	{
+		if (currentObjective == null)
+		{
+			currentObjective = what;
+			what.SetOwner(this);
+			what.Activate();
+
+			Debug.LogFormat("NPC ({0}): started {1}", name, what);
+		}
+		return currentObjective;
 	}
 
 	IEnumerator YayCoroutine()

@@ -17,12 +17,16 @@ public class PlayerController : MonoBehaviour
 	public float reachDistance = 2;
 	public LayerMask pickUpLayers;
 
+	public Fungus.SayDialog sayDialog;
+
 	public InputConfig inputConfig;
 
 	Transform cameraTransform;
 	Rigidbody characterRigidbody;
-	private UnityEngine.AI.NavMeshAgent agent; // nav-mesh agent used for avoidance
-	private PickerUpper pickerUpper;
+	UnityEngine.AI.NavMeshAgent agent; // nav-mesh agent used for avoidance
+	PickerUpper pickerUpper;
+
+	Fungus.Writer writer;
 
 	Vector3 prevMove;
 	float tumble = 0;
@@ -30,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
 	Vector3 inputVector;
 	bool moving;
-	bool droppingItem;
+	bool interactButtonDownHandled;
 
 	Collider[] results = new Collider[60];
 
@@ -52,6 +56,11 @@ public class PlayerController : MonoBehaviour
 		AudioListener al = cam.GetComponent<AudioListener>();
 		al.enabled = playerIndex == 0;
 
+		Canvas sayDialogCanvas = sayDialog.GetComponent<Canvas>();
+		sayDialogCanvas.worldCamera = cam;
+
+		writer = sayDialog.GetComponent<Fungus.Writer>();
+
 		cameraTransform = cam.transform;
 
 		//animator = GetComponent<Animator>();
@@ -61,6 +70,12 @@ public class PlayerController : MonoBehaviour
 		agent.updateRotation = false;
 
 		prevMove = transform.forward;
+
+		if (this.playerIndex == 0)
+		{
+			// TODO(elliot): switch the active say dialog based on who interacts with the npc.
+			Fungus.SayDialog.ActiveSayDialog = this.sayDialog;
+		}
 	}
 
 	void Update()
@@ -80,13 +95,34 @@ public class PlayerController : MonoBehaviour
 
 		moving = inputVector.sqrMagnitude > float.Epsilon;
 
-		if (moving) {
+		if (moving)
+		{
 			animator.SetBool("IsWalking", true);
-		} else {
+		}
+		else
+		{
 			animator.SetBool("IsWalking", false);
 		}
 
-		if (!droppingItem)
+		if (Input.GetButtonDown(inputConfig.interact))
+		{
+			if (writer.IsWriting)
+			{
+				 var inputListeners = sayDialog.GetComponentsInChildren<Fungus.IDialogInputListener>();
+         for (int i = 0; i < inputListeners.Length; i++)
+         {
+             var inputListener = inputListeners[i];
+             inputListener.OnNextLineEvent();
+         }
+				interactButtonDownHandled = true;
+			}
+			else if (pickerUpper.heldItem != null)
+			{
+				interactButtonDownHandled = true;
+				pickerUpper.Drop();
+			}
+		}
+		if (!interactButtonDownHandled)
 		{
 			if (Input.GetButton(inputConfig.interact))
 			{
@@ -117,15 +153,7 @@ public class PlayerController : MonoBehaviour
 		{
 			if (Input.GetButtonUp(inputConfig.interact))
 			{
-				droppingItem = false;
-			}
-		}
-		if (Input.GetButtonDown(inputConfig.interact))
-		{
-			if (pickerUpper.heldItem != null)
-			{
-				droppingItem = true;
-				pickerUpper.Drop();
+				interactButtonDownHandled = false;
 			}
 		}
 	}
