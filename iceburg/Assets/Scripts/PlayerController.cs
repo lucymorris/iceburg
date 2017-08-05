@@ -17,8 +17,6 @@ public class PlayerController : MonoBehaviour
 	public float reachDistance = 2;
 	public LayerMask pickUpLayers;
 
-	public Fungus.SayDialog sayDialog;
-
 	public InputConfig inputConfig;
 
 	Transform cameraTransform;
@@ -56,11 +54,6 @@ public class PlayerController : MonoBehaviour
 		AudioListener al = cam.GetComponent<AudioListener>();
 		al.enabled = playerIndex == 0;
 
-		Canvas sayDialogCanvas = sayDialog.GetComponent<Canvas>();
-		sayDialogCanvas.worldCamera = cam;
-
-		writer = sayDialog.GetComponent<Fungus.Writer>();
-
 		cameraTransform = cam.transform;
 
 		//animator = GetComponent<Animator>();
@@ -70,17 +63,12 @@ public class PlayerController : MonoBehaviour
 		agent.updateRotation = false;
 
 		prevMove = transform.forward;
-
-		if (this.playerIndex == 0)
-		{
-			// TODO(elliot): switch the active say dialog based on who interacts with the npc.
-			Fungus.SayDialog.ActiveSayDialog = this.sayDialog;
-		}
 	}
 
 	void Update()
 	{
-		if (tumble > 0) {
+		if (tumble > 0)
+		{
 			tumble -= Time.deltaTime;
 		}
 
@@ -106,9 +94,10 @@ public class PlayerController : MonoBehaviour
 
 		if (Input.GetButtonDown(inputConfig.interact))
 		{
+			Fungus.Writer writer = Fungus.SayDialog.ActiveSayDialog.GetComponent<Fungus.Writer>();
 			if (writer.IsWriting)
 			{
-				 var inputListeners = sayDialog.GetComponentsInChildren<Fungus.IDialogInputListener>();
+				 var inputListeners = Fungus.SayDialog.ActiveSayDialog.GetComponentsInChildren<Fungus.IDialogInputListener>();
          for (int i = 0; i < inputListeners.Length; i++)
          {
              var inputListener = inputListeners[i];
