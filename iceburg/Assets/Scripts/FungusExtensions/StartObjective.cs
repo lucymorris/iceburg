@@ -114,7 +114,7 @@ public class StartObjective : Command, ILocalizable
 
     public override Color GetButtonColor()
     {
-        return new Color32(184, 210, 235, 255);
+        return new Color32(235, 210, 184, 255);
     }
 
     #endregion
