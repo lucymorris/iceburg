@@ -248,7 +248,15 @@ public class PlayerController : MonoBehaviour
 			{
 				tumble = 0;
 
-				Quaternion targetRotation = Quaternion.LookRotation(moveVector, groundNormal);
+				Quaternion targetRotation;
+				if (moving)
+				{
+					targetRotation = Quaternion.LookRotation(moveVector, groundNormal);
+				}
+				else
+				{
+					targetRotation = Quaternion.LookRotation(transform.forward, groundNormal);
+				}
 				Quaternion newRotation = Quaternion.RotateTowards(characterRigidbody.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
 				characterRigidbody.MoveRotation(newRotation);
