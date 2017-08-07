@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
 
 	public InputConfig inputConfig;
 
+	public Expandy pickUpPrompt;
+
 	Transform cameraTransform;
 	Rigidbody characterRigidbody;
 	UnityEngine.AI.NavMeshAgent agent; // nav-mesh agent used for avoidance
@@ -97,12 +99,12 @@ public class PlayerController : MonoBehaviour
 			Fungus.Writer writer = Fungus.SayDialog.ActiveSayDialog.GetComponent<Fungus.Writer>();
 			if (writer.IsWriting)
 			{
-				 var inputListeners = Fungus.SayDialog.ActiveSayDialog.GetComponentsInChildren<Fungus.IDialogInputListener>();
-         for (int i = 0; i < inputListeners.Length; i++)
-         {
-             var inputListener = inputListeners[i];
-             inputListener.OnNextLineEvent();
-         }
+				var inputListeners = Fungus.SayDialog.ActiveSayDialog.GetComponentsInChildren<Fungus.IDialogInputListener>();
+				for (int i = 0; i < inputListeners.Length; i++)
+				{
+						var inputListener = inputListeners[i];
+						inputListener.OnNextLineEvent();
+				}
 				interactButtonDownHandled = true;
 			}
 			else if (pickerUpper.heldItem != null)
@@ -113,27 +115,53 @@ public class PlayerController : MonoBehaviour
 		}
 		if (!interactButtonDownHandled)
 		{
-			if (Input.GetButton(inputConfig.interact))
+			pickerUpper.pickUpDistance = reachDistance;
+
+			Holdable closest = null;
+			if (pickerUpper.heldItem == null)
 			{
-				pickerUpper.pickUpDistance = reachDistance;
+				Vector3 origin = this.transform.position;
+				float radius = pickerUpper.pickUpDistance;
+				int layerMask = pickUpLayers.value;
+				int hits = Physics.OverlapSphereNonAlloc(origin, radius, results, layerMask);
+				float closestDist = pickerUpper.activeRadius;
 
-				if (pickerUpper.heldItem == null)
+				Vector3 pickUpPos = origin;
+
+				for (int index = 0; index < hits; ++index)
 				{
-					pickerUpper.Activate();
-
-					Vector3 origin = this.transform.position;
-					float radius = pickerUpper.activeRadius;
-					int layerMask = pickUpLayers.value;
-					int hits = Physics.OverlapSphereNonAlloc(origin, radius, results, layerMask);
-					for (int index = 0; index < hits; ++index)
+					Collider hit = results[index];
+					float distance = Vector3.Distance(hit.transform.position, pickUpPos);
+					if (distance < closestDist)
 					{
-						Collider hit = results[index];
 						Holdable item = hit.GetComponent<Holdable>();
 						if (item != null)
 						{
-							pickerUpper.PickUp(item);
-							break;
+							closestDist = distance;
+							closest = item;
 						}
+					}
+				}
+			}
+			if (pickUpPrompt != null)
+			{
+				if (closest != null)
+				{
+					pickUpPrompt.Show();
+				}
+				else
+				{
+					pickUpPrompt.Hide();
+				}
+			}
+			if (Input.GetButton(inputConfig.interact))
+			{
+				if (pickerUpper.heldItem == null)
+				{
+					pickerUpper.Activate();
+					if (closest != null)
+					{
+						pickerUpper.PickUp(closest);
 					}
 				}
 			}

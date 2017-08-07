@@ -10,10 +10,6 @@ public class CompleteEvent : UnityEvent
 
 public abstract class Objective : MonoBehaviour
 {
-	// TODO: get rid of this string and pass in a string form the dialog system as the FormatDialog format
-	public string dialogText;
-	public string completeDialogText;
-
 	public CompleteEvent complete;
 
 	public abstract void SetOwner(NPC owner);

@@ -23,6 +23,8 @@ public class Holdable : MonoBehaviour
 
 	Rigidbody thisRigidbody;
 
+	List<Renderer> renderers = new List<Renderer>();
+
 	public void Awake()
 	{
 		thisRigidbody = GetComponent<Rigidbody>();
@@ -39,6 +41,14 @@ public class Holdable : MonoBehaviour
 			if (thisRigidbody != null)
 			{
 				thisRigidbody.isKinematic = true;
+			}
+
+			bool includeInactive = true;
+			gameObject.GetComponentsInChildren<Renderer>(includeInactive, renderers);
+
+			for (int i = 0; i < renderers.Count; ++i)
+			{
+				renderers[i].enabled = false;
 			}
 		}
 		else
@@ -127,6 +137,11 @@ public class Holdable : MonoBehaviour
 			{
 				spawner.Consume();
 				spawner = null;
+
+				for (int i = 0; i < renderers.Count; ++i)
+				{
+					renderers[i].enabled = true;
+				}
 			}
 
 			this.gameObject.layer = heldLayer;

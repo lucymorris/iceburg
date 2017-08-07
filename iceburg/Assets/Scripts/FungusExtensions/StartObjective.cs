@@ -11,19 +11,19 @@ using Fungus;
              "Objective", 
              "Starts an objective")]
 [AddComponentMenu("")]
-public class StartObjective : Command, ILocalizable
+public class StartObjective : Command //, ILocalizable
 {
-    [Tooltip("Text to display on the menu button")]
-    [SerializeField] protected string text = "";
+    // [Tooltip("Text to display on the menu button")]
+    // [SerializeField] protected string text = "";
 
-    [Tooltip("Notes about the option text for other authors, localization, etc.")]
-    [SerializeField] protected string description = "";
+    // [Tooltip("Notes about the option text for other authors, localization, etc.")]
+    // [SerializeField] protected string description = "";
 
-    [Tooltip("NOT IMPLEMENTED YET! Block to execute when this option is selected")]
-    [SerializeField] protected Block targetBlockSuccess;
+    // [Tooltip("NOT IMPLEMENTED YET! Block to execute when this option is selected")]
+    // [SerializeField] protected Block targetBlockSuccess;
 
-    [Tooltip("Hide this option if the target block has been executed previously")]
-    [SerializeField] protected bool skipIfVisited;
+    // [Tooltip("Hide this option if the target block has been executed previously")]
+    // [SerializeField] protected bool skipIfVisited;
 
     // [Tooltip("If false, the menu option will be displayed but will not be selectable")]
     // [SerializeField] protected BooleanData interactable = new BooleanData(true);
@@ -79,13 +79,13 @@ public class StartObjective : Command, ILocalizable
         Continue();
     }
 
-    public override void GetConnectedBlocks(ref List<Block> connectedBlocks)
-    {
-        if (targetBlockSuccess != null)
-        {
-            connectedBlocks.Add(targetBlockSuccess);
-        }
-    }
+    // public override void GetConnectedBlocks(ref List<Block> connectedBlocks)
+    // {
+    //     if (targetBlockSuccess != null)
+    //     {
+    //         connectedBlocks.Add(targetBlockSuccess);
+    //     }
+    // }
 
     public override string GetSummary()
     {
@@ -121,26 +121,25 @@ public class StartObjective : Command, ILocalizable
 
     #region ILocalizable implementation
 
-    public virtual string GetStandardText()
-    {
-        return text;
-    }
+    // public virtual string GetStandardText()
+    // {
+    //     return text;
+    // }
 
-    public virtual void SetStandardText(string standardText)
-    {
-        text = standardText;
-    }
+    // public virtual void SetStandardText(string standardText)
+    // {
+    //     text = standardText;
+    // }
     
-    public virtual string GetDescription()
-    {
-        return description;
-    }
+    // public virtual string GetDescription()
+    // {
+    //     return description;
+    // }
     
-    public virtual string GetStringId()
-    {
-        // String id for Menu commands is MENU.<Localization Id>.<Command id>
-        return "MENU." + GetFlowchartLocalizationId() + "." + itemId;
-    }
+    // public virtual string GetStringId()
+    // {
+    //     return "QUEST." + GetFlowchartLocalizationId() + "." + itemId;
+    // }
 
     #endregion
 }
