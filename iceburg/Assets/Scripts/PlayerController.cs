@@ -48,8 +48,11 @@ public class PlayerController : MonoBehaviour
 	{
 		Camera cam = Object.Instantiate(cameraPrefab);
 
+		GameObject[] activePlayers = GameObject.FindGameObjectsWithTag("Player");
+
 		var camScript = cam.GetComponent<FollowCamera>();
 		camScript.followedObject = cameraTarget;
+		camScript.splitscreen = activePlayers.Length > 1;
 		camScript.playerIndex = playerIndex;
 		camScript.inputConfig = inputConfig;
 

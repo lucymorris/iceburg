@@ -28,6 +28,9 @@ public class FollowCamera : MonoBehaviour {
     public int playerIndex;
 
     [System.NonSerialized]
+    public bool splitscreen;
+
+    [System.NonSerialized]
     public InputConfig inputConfig;
 
     float currentAngleAboutY;
@@ -69,7 +72,14 @@ public class FollowCamera : MonoBehaviour {
 
         justSpawned = true;
 
-        thisCamera.rect = new Rect( 0.0f,0.5f * (float)playerIndex, 1.0f, 0.5f);
+        if (splitscreen)
+        {
+            thisCamera.rect = new Rect(0.0f,0.5f * (float)playerIndex, 1.0f, 0.5f);
+        }
+        else
+        {
+            thisCamera.rect = new Rect(0, 0, 1, 1);
+        }
     }
 
     void Update()

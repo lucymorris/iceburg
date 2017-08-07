@@ -6,7 +6,6 @@ public class respawn : MonoBehaviour
 {
 	public Holdable itemPrefab;
 	public float respawnSeconds = 5;
-    public Expandy popup;
 
 	[System.NonSerialized]
 	public Holdable item;
