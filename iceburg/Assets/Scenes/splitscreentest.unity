@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.82339305, g: 0.6675295, b: 1.2141105, a: 1}
+  m_IndirectSpecularColor: {r: 0.8387245, g: 0.7687763, b: 1.2363151, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -424,7 +424,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &202511771
 AudioSource:
   m_ObjectHideFlags: 0
@@ -957,7 +957,6 @@ GameObject:
   - component: {fileID: 375644007}
   - component: {fileID: 375644006}
   - component: {fileID: 375644005}
-  - component: {fileID: 375644004}
   - component: {fileID: 375644003}
   m_Layer: 0
   m_Name: Flowchart
@@ -965,7 +964,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &375644003
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -981,7 +980,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: You did it!!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 1406489573}
   portrait: {fileID: 21300000, guid: ba86985a610663c45b15ec11d9e98bd8, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -991,30 +990,6 @@ MonoBehaviour:
   waitForClick: 1
   stopVoiceover: 1
   setSayDialog: {fileID: 0}
---- !u!114 &375644004
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 375644002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nodeRect:
-    serializedVersion: 2
-    x: 236
-    y: 135
-    width: 120
-    height: 40
-  tint: {r: 1, g: 1, b: 1, a: 1}
-  useCustomTint: 0
-  itemId: 8
-  blockName: Next part
-  description: 
-  eventHandler: {fileID: 0}
-  commandList: []
 --- !u!114 &375644005
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -1028,12 +1003,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 7
   indentLevel: 0
-  text: 
-  description: 
-  targetBlockSuccess: {fileID: 0}
-  skipIfVisited: 0
-  npc: {fileID: 0}
-  objective: {fileID: 0}
+  npc: {fileID: 725714173}
+  objective: {fileID: 1337994959}
 --- !u!114 &375644006
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -1052,7 +1023,7 @@ MonoBehaviour:
 
     Nice to meet you!!'
   description: 
-  character: {fileID: 0}
+  character: {fileID: 1406489573}
   portrait: {fileID: 21300000, guid: ba86985a610663c45b15ec11d9e98bd8, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1077,7 +1048,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: Over here!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 1406489573}
   portrait: {fileID: 21300000, guid: ba86985a610663c45b15ec11d9e98bd8, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1102,7 +1073,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: Let's get started! {$ObjectiveText}
   description: 
-  character: {fileID: 0}
+  character: {fileID: 1406489573}
   portrait: {fileID: 21300000, guid: ba86985a610663c45b15ec11d9e98bd8, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1126,7 +1097,7 @@ MonoBehaviour:
   itemId: 3
   indentLevel: 0
   description: 
-  targetObject: {fileID: 0}
+  targetObject: {fileID: 1337994960}
   targetComponentAssemblyName: DepositObjective, Assembly-CSharp, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
   targetComponentFullname: UnityEngine.Component[]
@@ -1264,10 +1235,8 @@ MonoBehaviour:
     y: -340
     width: 1114
     height: 859
-  selectedBlocks:
-  - {fileID: 375644013}
-  selectedCommands:
-  - {fileID: 375644006}
+  selectedBlocks: []
+  selectedCommands: []
   variables:
   - {fileID: 375644010}
   description: 
@@ -1536,6 +1505,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3c21b1b0cab5309429de9547951f1b92, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &725714173 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114569196838693674, guid: 3c21b1b0cab5309429de9547951f1b92,
+    type: 2}
+  m_PrefabInternal: {fileID: 725714172}
+  m_Script: {fileID: 11500000, guid: 1210beb39721fcb488e0e9a77228cf18, type: 3}
 --- !u!1001 &885167913
 Prefab:
   m_ObjectHideFlags: 0
@@ -1991,6 +1966,23 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ee295e306d03ee5408fa9bea8779bb02, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1337994959 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114255898653339294, guid: ee295e306d03ee5408fa9bea8779bb02,
+    type: 2}
+  m_PrefabInternal: {fileID: 1337994958}
+  m_Script: {fileID: 11500000, guid: a362e8402ba880344b325547e59168a9, type: 3}
+--- !u!1 &1337994960 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1195685430725436, guid: ee295e306d03ee5408fa9bea8779bb02,
+    type: 2}
+  m_PrefabInternal: {fileID: 1337994958}
+--- !u!114 &1406489573 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114116703316182902, guid: 3c21b1b0cab5309429de9547951f1b92,
+    type: 2}
+  m_PrefabInternal: {fileID: 725714172}
+  m_Script: {fileID: 11500000, guid: 25fb867d2049d41f597aefdd6b19f598, type: 3}
 --- !u!1 &1423451500
 GameObject:
   m_ObjectHideFlags: 0
