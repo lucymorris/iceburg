@@ -118,13 +118,13 @@ public class PlayerController : MonoBehaviour
 			pickerUpper.pickUpDistance = reachDistance;
 
 			Holdable closest = null;
+			float closestDist = reachDistance;
 			if (pickerUpper.heldItem == null)
 			{
 				Vector3 origin = this.transform.position;
 				float radius = pickerUpper.pickUpDistance;
 				int layerMask = pickUpLayers.value;
 				int hits = Physics.OverlapSphereNonAlloc(origin, radius, results, layerMask);
-				float closestDist = pickerUpper.activeRadius;
 
 				Vector3 pickUpPos = origin;
 
@@ -159,7 +159,7 @@ public class PlayerController : MonoBehaviour
 				if (pickerUpper.heldItem == null)
 				{
 					pickerUpper.Activate();
-					if (closest != null)
+					if (closest != null && closestDist < pickerUpper.activeRadius)
 					{
 						pickerUpper.PickUp(closest);
 					}
