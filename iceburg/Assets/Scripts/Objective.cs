@@ -17,4 +17,5 @@ public abstract class Objective : MonoBehaviour
 	public abstract void Activate();
 	public abstract bool IsComplete();
 	public abstract void PostCompletion();
+	public abstract void RemoveItem(Holdable item);
 }

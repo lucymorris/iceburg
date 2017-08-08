@@ -67,17 +67,16 @@ public class DepositObjective : Objective
 		}
 	}
 
-	public void OnTriggerEnter(Collider other)
+	public void OnTriggerStay(Collider other)
 	{
 		Holdable item = other.GetComponent<Holdable>();
 		if (item != null)
 		{
-			if (item.type == requiredType)
+			if (item.holders.Count == 0 && item.type == requiredType)
 			{
-				AddItem(item);
+				AddItemInternal(item);
 			}
 		}
-
 		CheckCompletion();
 	}
 
@@ -93,13 +92,16 @@ public class DepositObjective : Objective
 		}
 	}
 
-	private void AddItem(Holdable item)
+	private void AddItemInternal(Holdable item)
 	{
-		heldItems.Add(item);
-		item.SetObjective(this);
+		if (!item.IsBeingHeldByObjective(this))
+		{
+			item.SetObjective(this);
+			heldItems.Add(item);
+		}
 	}
 
-	private void RemoveItem(Holdable item)
+	public override void RemoveItem(Holdable item)
 	{
 		if (heldItems.Remove(item))
 		{

@@ -71,10 +71,19 @@ public class Holdable : MonoBehaviour
 		}
 	}
 
+	public bool IsBeingHeldByObjective(Objective objective)
+	{
+		return this.objective == objective;
+	}
+
 	public void AddHolder(PickerUpper holder, float holdDistance)
 	{
 		if (!this.IsBeingHeldBy(holder))
 		{
+			if (this.objective != null)
+			{
+				this.objective.RemoveItem(this);
+			}
 			holders.Add(holder);
 		}
 	}
@@ -166,11 +175,25 @@ public class Holdable : MonoBehaviour
 		{
 			this.gameObject.layer = defaultLayer;
 
-			if (objective != null || spawner != null)
+			if (spawner != null)
 			{
 				if (thisRigidbody != null)
 				{
 					thisRigidbody.isKinematic = true;
+				}
+			}
+			else if (objective != null)
+			{
+				if (thisRigidbody != null)
+				{
+					Vector3 directionToCenter = objective.transform.position - transform.position;
+					directionToCenter *= directionToCenter.magnitude;
+					if (directionToCenter.magnitude > 1.0f)
+					{
+						directionToCenter.Normalize();
+					}
+
+					thisRigidbody.AddForce(directionToCenter, ForceMode.VelocityChange);
 				}
 			}
 			else
