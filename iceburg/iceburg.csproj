@@ -560,6 +560,7 @@
     <Compile Include="Assets\Scripts\DepositObjective.cs" />
     <Compile Include="Assets\Scripts\environment scripts\respawn.cs" />
     <Compile Include="Assets\Scripts\environment scripts\spawnConsumable.cs" />
+    <Compile Include="Assets\Scripts\Expandy.cs" />
     <Compile Include="Assets\Scripts\FollowCamera.cs" />
     <Compile Include="Assets\Scripts\FungusExtensions\ObjectiveComplete.cs" />
     <Compile Include="Assets\Scripts\FungusExtensions\StartObjective.cs" />
