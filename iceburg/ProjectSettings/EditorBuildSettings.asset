@@ -6,5 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/maintestscene.unity
-    guid: 361bb2a7fa9397c4b989610f0454eefe
+    path: Assets/Scenes/TitleScreen.unity
+    guid: d07381ad24867a64e8dd2bf7f93b3f8c
+  - enabled: 1
+    path: Assets/Scenes/splitscreentest.unity
+    guid: f20af35cb851c724998bd197bae703ca
