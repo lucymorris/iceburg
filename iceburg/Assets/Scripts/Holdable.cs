@@ -67,7 +67,7 @@ public class Holdable : MonoBehaviour
 	{
 		if (this.objective == objective)
 		{
-			this.objective = objective;
+			this.objective = null;
 		}
 	}
 
