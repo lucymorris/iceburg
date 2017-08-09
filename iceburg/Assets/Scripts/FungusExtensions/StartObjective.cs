@@ -35,7 +35,13 @@ public class StartObjective : Command //, ILocalizable
     [SerializeField] protected NPC npc;
 
     [Tooltip("The objective to start.")]
-    [SerializeField] protected Objective objective;
+    [SerializeField] protected DepositObjective objective;
+
+    [Tooltip("How many?")]
+    [SerializeField] protected IntegerData requiredAmount = new IntegerData(1);
+
+    [Tooltip("What?")]
+    [SerializeField] protected Holdable.ItemType requiredType;
 
     #region Public members
 
@@ -64,6 +70,9 @@ public class StartObjective : Command //, ILocalizable
         //         menuDialog.AddOption(displayText, interactable, targetBlockSuccess);
         //     }
         // }
+
+        objective.requiredAmount = requiredAmount;
+        objective.requiredType = requiredType;
 
         objective.complete.AddListener(HandleComplete);
         npc.StartObjective(objective);
