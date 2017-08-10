@@ -556,6 +556,7 @@
     <Compile Include="Assets\Fungus\Thirdparty\Usfxr\Scripts\SfxrSynth.cs" />
     <Compile Include="Assets\Scripts\BabyFollow.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scripts\CameraLookie.cs" />
     <Compile Include="Assets\Scripts\CharacterController.cs" />
     <Compile Include="Assets\Scripts\DepositObjective.cs" />
     <Compile Include="Assets\Scripts\environment scripts\respawn.cs" />
@@ -566,13 +567,11 @@
     <Compile Include="Assets\Scripts\FungusExtensions\StartObjective.cs" />
     <Compile Include="Assets\Scripts\Holdable.cs" />
     <Compile Include="Assets\Scripts\InputConfig.cs" />
-    <Compile Include="Assets\Scripts\Inventory.cs" />
-    <Compile Include="Assets\Scripts\InventoryScreen.cs" />
-    <Compile Include="Assets\Scripts\InventoryScreenEntry.cs" />
     <Compile Include="Assets\Scripts\NPC.cs" />
     <Compile Include="Assets\Scripts\Objective.cs" />
     <Compile Include="Assets\Scripts\PickerUpper.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\StartIntro.cs" />
     <Compile Include="Assets\Scripts\ThirdPersonCameraController.cs" />
   </ItemGroup>
   <ItemGroup>

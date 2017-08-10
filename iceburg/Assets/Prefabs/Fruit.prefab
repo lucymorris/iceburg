@@ -112,7 +112,7 @@ MonoBehaviour:
   holders: []
   type: 0
   smoothTime: 10
-  holdersRequired: 1
+  holdersRequired: 2
 --- !u!135 &135317155688014528
 SphereCollider:
   m_ObjectHideFlags: 1
