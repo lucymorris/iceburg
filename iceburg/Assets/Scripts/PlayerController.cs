@@ -61,6 +61,8 @@ public class PlayerController : MonoBehaviour
 
 		cameraTransform = cam.transform;
 
+		pickUpPrompt.GetComponent<CameraLookie>().cam = cameraTransform;
+
 		//animator = GetComponent<Animator>();
 		characterRigidbody = GetComponent<Rigidbody>();
 		agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
